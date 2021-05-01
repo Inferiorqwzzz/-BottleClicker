@@ -1,27 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static int score;
     public static int gainOnClick;
     public static int passiveGain;
-    public static int passiveScore;
-      void Start()
+    public static int canBuyFurniture;
+      public void Start()
     {
-        
-        score = PlayerPrefs.GetInt("score",0); 
-        gainOnClick = PlayerPrefs.GetInt("gainOnClick",1);
-        passiveGain = PlayerPrefs.GetInt("passiveGain",1);
+        canBuyFurniture = 1;
+        // score = PlayerPrefs.GetInt("score", 0); 
+        // gainOnClick = PlayerPrefs.GetInt("gainOnClick",100000);
+        // passiveGain = PlayerPrefs.GetInt("passiveGain",1);
     }
     
-    void Update()
+    public void DeleteProgress ()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            PlayerPrefs.DeleteAll();
-        }
+        PlayerPrefs.DeleteAll();
+        print ("deleted");
+        SceneManager.LoadScene("SampleScene");
+
     }
 
+   
 }
