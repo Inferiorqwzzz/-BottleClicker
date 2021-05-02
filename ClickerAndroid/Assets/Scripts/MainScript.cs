@@ -10,6 +10,8 @@ public class MainScript : MonoBehaviour
     public GameObject Street, Room, Home, Shop; //Bums
     public Sprite [] roomFurniture, homeFurniture; 
     public GameObject changeRoomObj, changeHomeObj;
+    public int curRoomFurniture = 0; 
+    public int curHomeFurniture = 0;
     string suffix;
     public void Incriment()
     {
@@ -105,17 +107,28 @@ public class MainScript : MonoBehaviour
     }
     void Start()
     {
-        GameManager.score = PlayerPrefs.GetInt("score", 0); 
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick",100);
-        GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain",1);
-        GameManager.canBuyFurniture = PlayerPrefs.GetInt ("canBuyFurniture", 1);
+        
+        LoadInformation();
+        LoadLocations();
+        
+        StartCoroutine (ScorePerSec());
+       
+    }
+    public void LoadLocations ()
+    {
         Street.SetActive(true);
         Room.SetActive(false);    
         Home.SetActive(false);
         Shop.SetActive(false);
         //Bums.SetActive(false);
-        StartCoroutine (ScorePerSec());
-       
+    }
+    public void LoadInformation ()
+    {
+        GameManager.score = PlayerPrefs.GetInt("score", 0); 
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick",100);
+        GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain",1);
+        GameManager.canBuyFurniture = PlayerPrefs.GetInt ("canBuyFurniture", 1);
+
     }
     public void Update()
     
@@ -142,15 +155,20 @@ public class MainScript : MonoBehaviour
         }
 
     }
-   public void Buy()
-   {
-     //if has key then  
-     changeRoomObj.GetComponent<Image>().sprite = roomFurniture[0];
-     changeHomeObj.GetComponent<Image>().sprite = homeFurniture[0];
+   public void BuyHome()
+   {   
+     changeHomeObj.GetComponent<Image>().sprite = homeFurniture[curHomeFurniture];
+     curHomeFurniture++;
+     // TODO: Make a starting loader of the furniture 
      //how to fucking do it 
      // firstly we dont do the permission to buy we have just to change images when push da baatton
      // we make an array of images 
      // then we take the component and change an image and can buy true
      //HOW TO SAVE IT
+   }
+   public void BuyRoom ()
+   {
+    changeRoomObj.GetComponent<Image>().sprite = roomFurniture[curRoomFurniture];
+    curRoomFurniture++;
    }
 }
