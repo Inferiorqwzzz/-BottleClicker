@@ -8,15 +8,21 @@ public class MainScript : MonoBehaviour
 {
     public Text activeScoreValue, passiveScoreValue;
     public GameObject Street, Room, Home, FurnitureShop, Bums, UpgradeShop, BumsBuying, Settings, Bonus;
-    public Sprite[] roomFurniture, homeFurniture, shopSprites;
-    public string[] shopItemsNames;
+    public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BomjShopSprites, UpgShopSprites;
+    public string[] FurItemName, UpgItemName, BumItemName;
     public GameObject changeRoomObj, changeHomeObj;
+    public int[] pricesFurniture, pricesUpgrades, pricesBums;
+    public GameObject[] changeFurnitureItem, changeUpgradeItem, changeBumItem;
 
-    public GameObject[] changeMarketItem;
+    private int curRoomFurniture;
+    private int curHomeFurniture;
+    private int curFurnitureItem;
 
-    public int curRoomFurniture = 0;
-    public int curHomeFurniture = 0;
-    public int curMarketItem = 0;
+    private int curBumItem;
+
+    private int curUpgItem;
+
+
     string suffix;
     public void Incriment()
     {
@@ -232,6 +238,10 @@ public class MainScript : MonoBehaviour
         GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 100);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 1);
         GameManager.canBuyFurniture = PlayerPrefs.GetInt("canBuyFurniture", 1);
+        curBumItem = PlayerPrefs.GetInt("curBumItem", 0);
+        curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
+        curUpgItem = PlayerPrefs.GetInt("curUpgItem", 0);
+        
 
     }
     public void Update()
@@ -275,14 +285,28 @@ public class MainScript : MonoBehaviour
         changeRoomObj.GetComponent<Image>().sprite = roomFurniture[curRoomFurniture];
         curRoomFurniture++;
     }
-    public void ChangeTheIconAndText()
+    public void BuyFurniture()
     {
-    //changeMarketItem[curMarketItem].GetComponentInChildren<Image>().sprite = shopSprites[curMarketItem];
-    //changeMarketItem[curMarketItem].GetComponentInChildren<Text>().text = shopItemsNames[curMarketItem];
-    changeMarketItem[curMarketItem].transform.Find("Text").GetComponent<Text>().text = shopItemsNames[curMarketItem];
-    changeMarketItem[curMarketItem].transform.Find("Image").GetComponent<Image>().sprite = shopSprites[curMarketItem];
-    curMarketItem++;
+    if ((GameManager.score >= pricesFurniture[curFurnitureItem]))
+    {
+    GameManager.score = GameManager.score - pricesFurniture[curFurnitureItem];
+    changeFurnitureItem[curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[curFurnitureItem];
+    changeFurnitureItem[curFurnitureItem].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[curFurnitureItem];
+    changeFurnitureItem[curFurnitureItem].transform.Find("Button").gameObject.SetActive(false);
+    //changeFurnitureItem[curFurnitureItem].transform.Find("Text (1)").gameObject.SetActive(false);
+    //changeFurnitureItem[curFurnitureItem].transform.Find("Image (1)").gameObject.SetActive(false);
+    changeFurnitureItem[curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
+    curFurnitureItem++;        
+    }
+    }
+    public void BuyUpgrade()
+    {}
+    public void BuyBum()
+    {
+ 
+
     }
     
     //TODO: 1) Moving on locations 2) Buying upgrades 3) Buying furniture 4) Buying + cost * 1.07
 }   //TODO: SHOP - loading the furniture - loading icons - change icons onclick - block icons until
+    //TODO: SHOP - LOADING 
