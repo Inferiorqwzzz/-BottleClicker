@@ -8,13 +8,25 @@ public class GameManager : MonoBehaviour
     public static int score;
     public static int gainOnClick;
     public static int passiveGain;
-    public static int canBuyFurniture;
+    public static int curRoomFurniture;
+    public static int curHomeFurniture;
+    public static int curFurnitureItem;
+
+    public static int curBumItem;
+
+    public static int curUpgItem;
+
+    
+
       public void Start()
     {
-        canBuyFurniture = 1;
-        // score = PlayerPrefs.GetInt("score", 0); 
-        // gainOnClick = PlayerPrefs.GetInt("gainOnClick",100000);
-        // passiveGain = PlayerPrefs.GetInt("passiveGain",1);
+        
+    }
+    public void Update()
+    {
+    //     print("FurITEM" + curFurnitureItem);
+    //     print ("homeSPRITE" + curHomeFurniture);
+    //     print("RoomSprite" + curRoomFurniture);
     }
     
     public void DeleteProgress ()

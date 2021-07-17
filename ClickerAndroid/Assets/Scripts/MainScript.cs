@@ -8,22 +8,40 @@ public class MainScript : MonoBehaviour
 {
     public Text activeScoreValue, passiveScoreValue;
     public GameObject Street, Room, Home, FurnitureShop, Bums, UpgradeShop, BumsBuying, Settings, Bonus;
-    public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BomjShopSprites, UpgShopSprites;
+    public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BumShopSprites, UpgShopSprites;
     public string[] FurItemName, UpgItemName, BumItemName;
     public GameObject changeRoomObj, changeHomeObj;
     public int[] pricesFurniture, pricesUpgrades, pricesBums;
+
+    public int[] bumsGains;
     public GameObject[] changeFurnitureItem, changeUpgradeItem, changeBumItem;
 
-    private int curRoomFurniture;
-    private int curHomeFurniture;
-    private int curFurnitureItem;
+    public int [] bumsLevels = new int[13];
 
-    private int curBumItem;
-
-    private int curUpgItem;
+    
 
 
     string suffix;
+    void Awake()
+    {
+    
+    }
+    void Start()
+    {
+        StartCoroutine(ScorePerSec());
+        LoadInformation();
+        LoadLocations();
+        
+        //LoadInformation();
+        //LoadLocations();
+        
+        //if ((GameManager.curHomeFurniture > 0) && (GameManager.curRoomFurniture > 0))
+        //{
+        //changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
+        //changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
+        //}
+
+    }
     public void Incriment()
     {
 
@@ -45,8 +63,6 @@ public class MainScript : MonoBehaviour
 
         double shortNumber = number / divisor;
 
-        Console.WriteLine(shortNumber);
-        Console.WriteLine(mag);
         return shortNumber;
     }
     public int toGetSuffix(int number)
@@ -56,8 +72,6 @@ public class MainScript : MonoBehaviour
 
         double shortNumber = number / divisor;
 
-        Console.WriteLine(shortNumber);
-        Console.WriteLine(mag);
         return mag;
     }
     public void goingToLocation(int num)
@@ -211,15 +225,6 @@ public class MainScript : MonoBehaviour
         else
             return false;
     }
-    void Start()
-    {
-
-        LoadInformation();
-        LoadLocations();
-
-        StartCoroutine(ScorePerSec());
-
-    }
     public void LoadLocations()
     {
         Street.SetActive(true);
@@ -235,15 +240,15 @@ public class MainScript : MonoBehaviour
     public void LoadInformation()
     {
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 100);
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1000);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 1);
-        GameManager.canBuyFurniture = PlayerPrefs.GetInt("canBuyFurniture", 1);
-        curBumItem = PlayerPrefs.GetInt("curBumItem", 0);
-        curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
-        curUpgItem = PlayerPrefs.GetInt("curUpgItem", 0);
+        ShopLoad();
+        
+        
         
 
     }
+
     public void Update()
 
     {
@@ -267,46 +272,107 @@ public class MainScript : MonoBehaviour
                 activeScoreValue.text = "Бутылачки: " + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
         }
+       
 
     }
+
     public void BuyHome()
     {
-        changeHomeObj.GetComponent<Image>().sprite = homeFurniture[curHomeFurniture];
-        curHomeFurniture++;
-        // TODO: Make a starting loader of the furniture 
-        //how to fucking do it 
-        // firstly we dont do the permission to buy we have just to change images when push da baatton
-        // we make an array of images 
-        // then we take the component and change an image and can buy true
-        //HOW TO SAVE IT
+        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        {
+        changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
+        GameManager.curHomeFurniture++;
+        PlayerPrefs.SetInt("curHomeFurniture", GameManager.curHomeFurniture); 
+        }
     }
     public void BuyRoom()
     {
-        changeRoomObj.GetComponent<Image>().sprite = roomFurniture[curRoomFurniture];
-        curRoomFurniture++;
+        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        {
+        changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
+        GameManager.curRoomFurniture++;
+        PlayerPrefs.SetInt("curRoomFurniture", GameManager.curRoomFurniture);
+        }
+        
     }
     public void BuyFurniture()
     {
-    if ((GameManager.score >= pricesFurniture[curFurnitureItem]))
+    if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
     {
-    GameManager.score = GameManager.score - pricesFurniture[curFurnitureItem];
-    changeFurnitureItem[curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[curFurnitureItem];
-    changeFurnitureItem[curFurnitureItem].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[curFurnitureItem];
-    changeFurnitureItem[curFurnitureItem].transform.Find("Button").gameObject.SetActive(false);
-    //changeFurnitureItem[curFurnitureItem].transform.Find("Text (1)").gameObject.SetActive(false);
-    //changeFurnitureItem[curFurnitureItem].transform.Find("Image (1)").gameObject.SetActive(false);
-    changeFurnitureItem[curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
-    curFurnitureItem++;        
+    GameManager.score = GameManager.score - pricesFurniture[GameManager.curFurnitureItem];
+    changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[GameManager.curFurnitureItem];
+    changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[GameManager.curFurnitureItem];
+    changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Button").gameObject.SetActive(false);
+    changeFurnitureItem[GameManager.curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
+    GameManager.curFurnitureItem++;  
+    //changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text (1)").gameObject.SetActive(false);
+    //changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Image (1)").gameObject.SetActive(false);
+    PlayerPrefs.SetInt("curFurnitureItem", GameManager.curFurnitureItem);         
     }
     }
     public void BuyUpgrade()
     {}
-    public void BuyBum()
+    public void BuyBum(int bum)
     {
- 
+    switch(bum)
+    {
+        case 0:
+        if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+        {
+        GameManager.score = GameManager.score - pricesBums[bum];
+        bumsLevels[bum]++;
+        pricesBums[bum] = pricesBums[bum] * 107 / 100;
+        changeBumItem[bum].transform.Find("Text").GetComponent<Text>().text = BumItemName[bum];
+        changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
+        changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesBums[bum]}");
+        changeBumItem[bum].transform.Find("Image").GetComponent<Image>().sprite = BumShopSprites[bum];
+        changeBumItem[bum + 1].transform.Find("Button").gameObject.SetActive(true);
+        GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
+        
+        break;
+        }
+        else if (pricesBums[bum] <= GameManager.score)
+        {
+            bumsLevels[bum]++;
+            pricesBums[bum] = pricesBums[bum] * 107 / 100;
+            GameManager.score = GameManager.score - pricesBums[bum];
+            GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
+            changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
+            changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesBums[bum]}");
+            break;
+        
+        }
+        else
+        {
+            break;
+        }
 
     }
+
+    }
+    public void ShopLoad()
+    {
+    GameManager.curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
+    GameManager.curRoomFurniture = PlayerPrefs.GetInt("curRoomFurniture", 0);
+    GameManager.curHomeFurniture = PlayerPrefs.GetInt("curHomeFurniture",0);
+    if (GameManager.curHomeFurniture != 0)
+    {
+        for (int i = 0; i <= GameManager.curFurnitureItem; i++)
+        {
+    changeFurnitureItem[i].transform.Find("Text").GetComponent<Text>().text = FurItemName[i];
+    changeFurnitureItem[i].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[i];
+    changeFurnitureItem[i].transform.Find("Button").gameObject.SetActive(false);
+    changeFurnitureItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
+        }
     
-    //TODO: 1) Moving on locations 2) Buying upgrades 3) Buying furniture 4) Buying + cost * 1.07
-}   //TODO: SHOP - loading the furniture - loading icons - change icons onclick - block icons until
-    //TODO: SHOP - LOADING 
+        }
+        if (GameManager.curHomeFurniture > 0 && GameManager.curRoomFurniture > 0)
+        {
+        changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
+        changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
+        }
+    }
+    
+    
+}  
+    
