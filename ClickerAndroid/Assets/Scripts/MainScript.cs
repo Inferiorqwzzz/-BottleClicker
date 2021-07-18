@@ -12,12 +12,13 @@ public class MainScript : MonoBehaviour
     public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BumShopSprites, UpgShopSprites;
     public string[] FurItemName, UpgItemName, BumItemName;
     public GameObject changeRoomObj, changeHomeObj;
-    public int[] pricesFurniture, pricesUpgrades, pricesBums;
+    public int[] pricesFurniture, pricesUpgrades, startingPricesOfUpgrades, pricesBums, startingPricesOfBums;
 
-    public int[] bumsGains;
+    public int[] bumsGains, upgClickGains;
     public GameObject[] changeFurnitureItem, changeUpgradeItem, changeBumItem;
 
     public int[] bumsLevels = new int[13];
+    public int[] upgLevels = new int[13];
 
     string suffix;
     #endregion
@@ -59,6 +60,7 @@ public class MainScript : MonoBehaviour
         LoadPlayer();
         BumShopLoad();
         FurShopLoad();
+        UpgShopLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
         GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1000000);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 1);
@@ -542,7 +544,6 @@ public class MainScript : MonoBehaviour
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
         SavePlayer();
-      
         pricesBums[bum] = pricesBums[bum] * 107 / 100;
         SavePlayer();
         changeBumItem[bum].transform.Find("Text").GetComponent<Text>().text = BumItemName[bum];
@@ -585,6 +586,262 @@ public class MainScript : MonoBehaviour
     }
     #endregion
 
+    public void BuyUpgrades(int upg)
+    {
+        switch (upg)
+        {
+            case 0:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 1:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 2:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 3:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 4:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 5:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 6:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 7:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 8:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 9:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 10:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 11:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            case 12:
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator1(upg);
+                    break;
+                }
+                else if (pricesUpgrades[upg] <= GameManager.score)
+                {
+                    BuyManipulator2(upg);
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+        }
+
+    }
+    public void BuyManipulator1(int upg)
+    {
+        GameManager.score = GameManager.score - pricesUpgrades[upg];
+        PlayerPrefs.SetInt("score", GameManager.score);
+        GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
+        PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
+        pricesUpgrades[upg] = pricesUpgrades[upg] * 107 / 100;
+        SavePlayer();
+        print(pricesUpgrades[upg]);
+        upgLevels[upg]++;
+        SavePlayer();
+        changeUpgradeItem[upg].transform.Find("Text").GetComponent<Text>().text = UpgItemName[upg];
+        changeUpgradeItem[upg].transform.Find("Text (2)").GetComponent<Text>().text = ("Ур: " + upgLevels[upg]);
+        changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesUpgrades[upg]}");
+        changeUpgradeItem[upg].transform.Find("Image").GetComponent<Image>().sprite = UpgShopSprites[upg];
+        changeUpgradeItem[upg + 1].transform.Find("Button").gameObject.SetActive(true);
+        GameManager.curUpgItem++;
+        PlayerPrefs.SetInt("curUpgItem", GameManager.curUpgItem);
+    }
+
+    public void BuyManipulator2(int upg)
+    {
+        GameManager.score = GameManager.score - pricesUpgrades[upg];
+        PlayerPrefs.SetInt("score", GameManager.score);
+        GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
+        PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
+        pricesUpgrades[upg] = pricesUpgrades[upg] * 107 / 100;
+        SavePlayer();
+        upgLevels[upg]++;
+        SavePlayer();
+
+        changeUpgradeItem[upg].transform.Find("Text (2)").GetComponent<Text>().text = ("Ур: " + upgLevels[upg]);
+        changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesUpgrades[upg]}");
+    }
+
+    public void UpgShopLoad()
+    {
+
+        GameManager.curUpgItem = PlayerPrefs.GetInt("curUpgItem", 0);
+
+        if (GameManager.curUpgItem != 0)
+        {
+            for (int i = 0; i < GameManager.curUpgItem; i++)
+            {
+                changeUpgradeItem[i].transform.Find("Text").GetComponent<Text>().text = UpgItemName[i];
+                changeUpgradeItem[i].transform.Find("Text (2)").GetComponent<Text>().text = ("Ур: " + upgLevels[i]);
+                changeUpgradeItem[i].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesUpgrades[i]}");
+                changeUpgradeItem[i].transform.Find("Image").GetComponent<Image>().sprite = UpgShopSprites[i];
+                changeUpgradeItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
+            }
+        }
+    }
+
     #region Saving
     public void SavePlayer()
     {
@@ -598,14 +855,50 @@ public class MainScript : MonoBehaviour
         {
             bumsLevels[i] = data.LevelsOfBums[i];
         }
+
         for (int i = 0; i < 13; i++)
         {
             pricesBums[i] = data.PricesOfBums[i];
         }
+
+        for (int i = 0; i < 13; i++)
+        {
+            upgLevels[i] = data.LevelsOfUpgrades[i];
+        }
+
+        for (int i = 0; i < 13; i++)
+        {
+            pricesUpgrades[i] = data.pricesOfUpgrades[i];
+        }
+    }
+    public void DeletePlayer()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+        for (int i = 0; i < 13; i++)
+        {
+            bumsLevels[i] = 0;
+        }
+
+        for (int i = 0; i < 13; i++)
+        {
+            pricesBums[i] = startingPricesOfBums[i];
+        }
+
+        for (int i = 0; i < 13; i++)
+        {
+            upgLevels[i] = 0;
+        }
+
+        for (int i = 0; i < 13; i++)
+        {
+            pricesUpgrades[i] = startingPricesOfUpgrades[i];
+        }
+
+        SavePlayer();
     }
 
 
-#endregion
+    #endregion
 }
 
 

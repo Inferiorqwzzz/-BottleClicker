@@ -31,10 +31,13 @@ public class GameManager : MonoBehaviour
     
     public void DeleteProgress ()
     {
+      MainScript mainScript = GetComponent<MainScript>();
         PlayerPrefs.DeleteAll();
+        mainScript.DeletePlayer();
         print ("deleted");
         SceneManager.LoadScene("SampleScene");
-
+        
+       
     }
 
 }
