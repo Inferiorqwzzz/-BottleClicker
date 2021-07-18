@@ -37,19 +37,19 @@ public class MainScript : MonoBehaviour
         {
             case 0:
                 suffix = string.Empty;
-                activeScoreValue.text = "Бутылачки: " + toShortNumber(GameManager.score) + suffix;
+                activeScoreValue.text = "" + toShortNumber(GameManager.score) + suffix;
                 break;
             case 1:
                 suffix = string.Empty;
-                activeScoreValue.text = "Бутылачки: " + toShortNumber(GameManager.score) + suffix;
+                activeScoreValue.text = "" + toShortNumber(GameManager.score) + suffix;
                 break;
             case 2:
                 suffix = "m";
-                activeScoreValue.text = "Бутылачки: " + toShortNumber(GameManager.score).ToString("N1") + suffix;
+                activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
             case 3:
                 suffix = "b";
-                activeScoreValue.text = "Бутылачки: " + toShortNumber(GameManager.score).ToString("N1") + suffix;
+                activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
         }
 
@@ -62,8 +62,8 @@ public class MainScript : MonoBehaviour
         FurShopLoad();
         UpgShopLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1000000);
-        GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 1);
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1);
+        GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
 
 
 
