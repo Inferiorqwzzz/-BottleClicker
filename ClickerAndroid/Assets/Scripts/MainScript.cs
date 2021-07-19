@@ -32,7 +32,7 @@ public class MainScript : MonoBehaviour
     public void Update()
 
     {
-        passiveScoreValue.text = "Бомжи приносят:" + GameManager.passiveGain;
+        passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
         switch (toGetSuffix(GameManager.score))
         {
             case 0:
@@ -44,11 +44,11 @@ public class MainScript : MonoBehaviour
                 activeScoreValue.text = "" + toShortNumber(GameManager.score) + suffix;
                 break;
             case 2:
-                suffix = "m";
+                suffix = "M";
                 activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
             case 3:
-                suffix = "b";
+                suffix = "B";
                 activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
         }
@@ -795,7 +795,7 @@ public class MainScript : MonoBehaviour
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
         PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
-        pricesUpgrades[upg] = pricesUpgrades[upg] * 107 / 100;
+        pricesUpgrades[upg] = pricesUpgrades[upg] * 130 / 100;
         SavePlayer();
         print(pricesUpgrades[upg]);
         upgLevels[upg]++;
@@ -815,7 +815,7 @@ public class MainScript : MonoBehaviour
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
         PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
-        pricesUpgrades[upg] = pricesUpgrades[upg] * 107 / 100;
+        pricesUpgrades[upg] = pricesUpgrades[upg] * 130 / 100;
         SavePlayer();
         upgLevels[upg]++;
         SavePlayer();
