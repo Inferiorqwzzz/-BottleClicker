@@ -544,7 +544,7 @@ public class MainScript : MonoBehaviour
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
         SavePlayer();
-        pricesBums[bum] = pricesBums[bum] * 107 / 100;
+        pricesBums[bum] = pricesBums[bum] * 130 / 100;
         SavePlayer();
         changeBumItem[bum].transform.Find("Text").GetComponent<Text>().text = BumItemName[bum];
         changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
@@ -562,7 +562,7 @@ public class MainScript : MonoBehaviour
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
         SavePlayer();
-        pricesBums[bum] = pricesBums[bum] * 107 / 100;
+        pricesBums[bum] = pricesBums[bum] * 130 / 100;
         SavePlayer();
         changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
         changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesBums[bum]}");
