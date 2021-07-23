@@ -7,8 +7,8 @@ using System;
 public class MainScript : MonoBehaviour
 {
     #region Variables declaration 
-    public Text activeScoreValue, passiveScoreValue;
-    public GameObject Street, Room, Home, FurnitureShop, Bums, UpgradeShop, BumsBuying, Settings, Bonus;
+    public Text activeScoreValue, passiveScoreValue, idleInfo;
+    public GameObject Street, Room, Home, FurnitureShop, Bums, UpgradeShop, BumsBuying, Settings, Bonus, Idle;
     public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BumShopSprites, UpgShopSprites;
     public string[] FurItemName, UpgItemName, BumItemName;
     public GameObject changeRoomObj, changeHomeObj;
@@ -20,6 +20,9 @@ public class MainScript : MonoBehaviour
     public int[] bumsLevels = new int[13];
     public int[] upgLevels = new int[13];
 
+
+
+    
     string suffix;
     #endregion
     void Start()
@@ -27,11 +30,16 @@ public class MainScript : MonoBehaviour
         StartCoroutine(ScorePerSec());
         LoadInformation();
         LoadLocations();
+        LoadPlayer();
+        idleInfo.text = "Пока вас не было бомжи принесли " + GameManager.toAddFromTime + " бутылок";
+
 
     }
     public void Update()
-
+    
     {
+        
+       
         passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
         switch (toGetSuffix(GameManager.score))
         {
@@ -52,18 +60,19 @@ public class MainScript : MonoBehaviour
                 activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
         }
-
+        
 
     }
     public void LoadInformation()
     {
         LoadPlayer();
         BumShopLoad();
-        FurShopLoad();
+        //FurShopLoad();
         UpgShopLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1);
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 12300);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
+        // GameManager. = PlayerPrefs.GetInt("newTime", 0);
 
 
 
@@ -111,6 +120,7 @@ public class MainScript : MonoBehaviour
     {
         if (num == 1) //go to street
         {
+            Idle.SetActive(false);
             Street.SetActive(true);
             Room.SetActive(false);
             Home.SetActive(false);
@@ -244,7 +254,8 @@ public class MainScript : MonoBehaviour
     }
     public void LoadLocations()
     {
-        Street.SetActive(true);
+        Idle.SetActive(true);
+        Street.SetActive(false);
         Room.SetActive(false);
         Home.SetActive(false);
         FurnitureShop.SetActive(false);
@@ -274,27 +285,27 @@ public class MainScript : MonoBehaviour
     #region FurnitureShopMethods
     public void BuyHome()
     {
-        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
-        {
+        //if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        //{
             changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
             GameManager.curHomeFurniture++;
             PlayerPrefs.SetInt("curHomeFurniture", GameManager.curHomeFurniture);
-        }
+        //}
     }
     public void BuyRoom()
     {
-        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
-        {
+        //if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        //{
             changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
             GameManager.curRoomFurniture++;
             PlayerPrefs.SetInt("curRoomFurniture", GameManager.curRoomFurniture);
-        }
+        //}
 
     }
     public void BuyFurniture()
     {
-        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
-        {
+        //if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        //{
             GameManager.score = GameManager.score - pricesFurniture[GameManager.curFurnitureItem];
             PlayerPrefs.SetInt("score", GameManager.score);
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[GameManager.curFurnitureItem];
@@ -302,34 +313,32 @@ public class MainScript : MonoBehaviour
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Button").gameObject.SetActive(false);
             changeFurnitureItem[GameManager.curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
             GameManager.curFurnitureItem++;
-            //changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text (1)").gameObject.SetActive(false);
-            //changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Image (1)").gameObject.SetActive(false);
             PlayerPrefs.SetInt("curFurnitureItem", GameManager.curFurnitureItem);
-        }
+        //}
     }
-    public void FurShopLoad()
+    // public void FurShopLoad()
 
-    {
-        GameManager.curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
-        GameManager.curRoomFurniture = PlayerPrefs.GetInt("curRoomFurniture", 0);
-        GameManager.curHomeFurniture = PlayerPrefs.GetInt("curHomeFurniture", 0);
-        if (GameManager.curHomeFurniture != 0)
-        {
-            for (int i = 0; i <= GameManager.curFurnitureItem; i++)
-            {
-                changeFurnitureItem[i].transform.Find("Text").GetComponent<Text>().text = FurItemName[i];
-                changeFurnitureItem[i].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[i];
-                changeFurnitureItem[i].transform.Find("Button").gameObject.SetActive(false);
-                changeFurnitureItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
-            }
+    // {
+    //     GameManager.curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
+    //     GameManager.curRoomFurniture = PlayerPrefs.GetInt("curRoomFurniture", 0);
+    //     GameManager.curHomeFurniture = PlayerPrefs.GetInt("curHomeFurniture", 0);
+    //     if (GameManager.curHomeFurniture != 0)
+    //     {
+    //         for (int i = 0; i <= GameManager.curFurnitureItem; i++)
+    //         {
+    //             changeFurnitureItem[i].transform.Find("Text").GetComponent<Text>().text = FurItemName[i];
+    //             changeFurnitureItem[i].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[i];
+    //             changeFurnitureItem[i].transform.Find("Button").gameObject.SetActive(false);
+    //             changeFurnitureItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
+    //         }
 
-        }
-        if (GameManager.curHomeFurniture > 0 && GameManager.curRoomFurniture > 0)
-        {
-            changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
-            changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
-        }
-    }
+    //     }
+    //     if (GameManager.curHomeFurniture > 0 && GameManager.curRoomFurniture > 0)
+    //     {
+    //         changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
+    //         changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
+    //     }
+    // }
     #endregion
 
     #region BumShop methods
@@ -586,6 +595,7 @@ public class MainScript : MonoBehaviour
     }
     #endregion
 
+    #region UpgradeShop Methods
     public void BuyUpgrades(int upg)
     {
         switch (upg)
@@ -841,6 +851,8 @@ public class MainScript : MonoBehaviour
             }
         }
     }
+
+#endregion
 
     #region Saving
     public void SavePlayer()
