@@ -22,7 +22,7 @@ public class MainScript : MonoBehaviour
 
 
 
-    
+
     string suffix;
     #endregion
     void Start()
@@ -36,10 +36,10 @@ public class MainScript : MonoBehaviour
 
     }
     public void Update()
-    
+
     {
-        
-       
+
+
         passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
         switch (toGetSuffix(GameManager.score))
         {
@@ -60,19 +60,19 @@ public class MainScript : MonoBehaviour
                 activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
         }
-        
+
 
     }
     public void LoadInformation()
     {
         LoadPlayer();
         BumShopLoad();
-        //FurShopLoad();
+        FurShopLoad();
         UpgShopLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
         GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 12300);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
-        // GameManager. = PlayerPrefs.GetInt("newTime", 0);
+    
 
 
 
@@ -116,24 +116,22 @@ public class MainScript : MonoBehaviour
 
     #region Location menegment methods
     public void goingToLocation(int num)
-
     {
-        if (num == 1) //go to street
-        {
+    switch (num)
+    {
+        case 1: //go to street screen
+        Street.SetActive(true);
             Idle.SetActive(false);
-            Street.SetActive(true);
             Room.SetActive(false);
             Home.SetActive(false);
             FurnitureShop.SetActive(false);
             Bums.SetActive(false);
             UpgradeShop.SetActive(false);
-            //.SetActive(false);
             BumsBuying.SetActive(false);
             Settings.SetActive(false);
-
             Bonus.SetActive(false);
-        }
-        if (num == 2) // go to home
+            break;
+        case 2: // go to home 
         {
             Street.SetActive(false);
             Room.SetActive(false);
@@ -141,12 +139,13 @@ public class MainScript : MonoBehaviour
             FurnitureShop.SetActive(false);
             Bums.SetActive(false);
             UpgradeShop.SetActive(false);
-            //.SetActive(false);
+          
             BumsBuying.SetActive(false);
             Settings.SetActive(false);
             Bonus.SetActive(false);
+            break;
         }
-        if (num == 3) // go to room
+        case 3: // go to room
         {
             Street.SetActive(false);
             Room.SetActive(true);
@@ -158,96 +157,141 @@ public class MainScript : MonoBehaviour
             BumsBuying.SetActive(false);
             Settings.SetActive(false);
             Bonus.SetActive(false);
+            break;
         }
-        if (num == 4) //go to shop
+        case 4: //go to FurShop
         {
-            Street.SetActive(false);
-            Room.SetActive(false);
-            Home.SetActive(false);
+            if (Idle.activeSelf == false)
+            {  
             FurnitureShop.SetActive(true);
-            Bums.SetActive(false);
             UpgradeShop.SetActive(false);
-            //.SetActive(false);
+            Settings.SetActive(false);
+            Bonus.SetActive(false);
+            break;
+            }
+            break;
+            
+        }
+        case 5: //go to bums
+        {
+            if (Idle.activeSelf == false)
+            {
+            Street.SetActive(false);
+            FurnitureShop.SetActive(false);
+            Bums.SetActive(true);
+            UpgradeShop.SetActive(false);
             BumsBuying.SetActive(false);
             Settings.SetActive(false);
             Bonus.SetActive(false);
+            break;
+            }
+            break;
         }
-        if (num == 5) //go to bums
+        case 7://go to UpgradeShop
         {
+           if (Idle.activeSelf == false)
+           {
+            
+            FurnitureShop.SetActive(false);
+           
+            UpgradeShop.SetActive(true);
+            
+            Settings.SetActive(false);
+            Bonus.SetActive(false);
+            break;
+           }
+           break;
+        }
+        case 8: //go to BumsBuying
+        {
+            Street.SetActive(false);
+            FurnitureShop.SetActive(false);
+            Bums.SetActive(true);
+            UpgradeShop.SetActive(false);
+            BumsBuying.SetActive(true);
+            Settings.SetActive(false);
+            Bonus.SetActive(false);
+            break;
+        }
+        case 9: //go to Setting
+        {
+            if (Idle.activeSelf == false)
+            {
+            Settings.SetActive(true);
+            Bonus.SetActive(false);
+            break;
+            }
+            break;
+            
+        }
+        case 10: //go to bonus
+        {
+            if (Idle.activeSelf == false)
+            {
+
+            if (Street.activeSelf == true)
+            {
+            Bonus.SetActive(true);
+            Street.SetActive(true);
+            Room.SetActive(false);
+            Home.SetActive(false);
+            FurnitureShop.SetActive(false);
+            Bums.SetActive(false);
+            UpgradeShop.SetActive(false);
+            BumsBuying.SetActive(false);
+            Settings.SetActive(false);
+            break;
+            }
+            if (Bums.activeSelf == true)
+            {
+                Bonus.SetActive(true);
             Street.SetActive(false);
             Room.SetActive(false);
             Home.SetActive(false);
             FurnitureShop.SetActive(false);
             Bums.SetActive(true);
             UpgradeShop.SetActive(false);
-            //.SetActive(false);
             BumsBuying.SetActive(false);
             Settings.SetActive(false);
-            Bonus.SetActive(false);
+            break;
+            }
+            }
+            break;
         }
-        if (num == 6) //go to upgradeShop
+        case 11: //to off bonus
         {
-            Street.SetActive(false);
-            Room.SetActive(false);
-            Home.SetActive(false);
-            FurnitureShop.SetActive(false);
-            Bums.SetActive(false);
-            UpgradeShop.SetActive(true);
-            //.SetActive(false);
-            BumsBuying.SetActive(false);
+            Bonus.SetActive(false);
+            break;
+        }
+        case 12: //to off settings
+        {
             Settings.SetActive(false);
-            Bonus.SetActive(false);
+            break;
         }
-        if (num == 7) //go to UpgradeShop
+        case 13: //to off furShop
         {
-            Street.SetActive(false);
-            Room.SetActive(false);
-            Home.SetActive(false);
-            FurnitureShop.SetActive(false);
-            Bums.SetActive(false);
-            UpgradeShop.SetActive(true);
-            //.SetActive(false);
-            BumsBuying.SetActive(false);
-            Settings.SetActive(false);
-            Bonus.SetActive(false);
+            if (Room.activeSelf == true)
+            {
+                goto case 3;
+            }
+            if (Home.activeSelf == true)
+            {
+                goto case 2;
+            }
+            if (BumsBuying.activeSelf == true)
+            {
+               goto case 5;
+            }
+            if (Bums.activeSelf == true)
+            {
+                goto case 5;
+            }
+            if (Street.activeSelf == true)
+            {
+                goto case 1;
+            }
+            break;
         }
-        if (num == 8) //go to BumsBuying
-        {
-            Street.SetActive(false);
-            Room.SetActive(false);
-            Home.SetActive(false);
-            FurnitureShop.SetActive(false);
-            Bums.SetActive(false);
-            UpgradeShop.SetActive(false);
-            //.SetActive(false);
-            BumsBuying.SetActive(true);
-            Settings.SetActive(false);
-            Bonus.SetActive(false);
-        }
-        if (num == 9) //go to Setting
-        {
-            Street.SetActive(false);
-            Room.SetActive(false);
-            Home.SetActive(false);
-            FurnitureShop.SetActive(false);
-            Bums.SetActive(false);
-            UpgradeShop.SetActive(false);
-            //.SetActive(false);
-            BumsBuying.SetActive(false);
-            Settings.SetActive(true);
-            Bonus.SetActive(false);
-        }
-        if (num == 10) //go to bonus
-        {
-            Street.SetActive(false);
-            Room.SetActive(false);
-            Home.SetActive(false);
-            FurnitureShop.SetActive(false);
-            Bums.SetActive(false);
-            UpgradeShop.SetActive(false);
-            BumsBuying.SetActive(false);
-            Settings.SetActive(false);
-            Bonus.SetActive(true);
         }
 
 
@@ -255,7 +299,7 @@ public class MainScript : MonoBehaviour
     public void LoadLocations()
     {
         Idle.SetActive(true);
-        Street.SetActive(false);
+        Street.SetActive(true);
         Room.SetActive(false);
         Home.SetActive(false);
         FurnitureShop.SetActive(false);
@@ -283,26 +327,8 @@ public class MainScript : MonoBehaviour
     #endregion
 
     #region FurnitureShopMethods
-    public void BuyHome()
-    {
-        //if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
-        //{
-            changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
-            GameManager.curHomeFurniture++;
-            PlayerPrefs.SetInt("curHomeFurniture", GameManager.curHomeFurniture);
-        //}
-    }
-    public void BuyRoom()
-    {
-        //if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
-        //{
-            changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
-            GameManager.curRoomFurniture++;
-            PlayerPrefs.SetInt("curRoomFurniture", GameManager.curRoomFurniture);
-        //}
 
-    }
-    public void BuyFurniture()
+    public void BuyFurniture(int home1room2)
     {
         if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
         {
@@ -314,31 +340,58 @@ public class MainScript : MonoBehaviour
             changeFurnitureItem[GameManager.curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
             GameManager.curFurnitureItem++;
             PlayerPrefs.SetInt("curFurnitureItem", GameManager.curFurnitureItem);
+            switch(home1room2)
+            {
+            case 1:
+            
+                changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
+                GameManager.curHomeFurniture++;
+                PlayerPrefs.SetInt("curHomeFurniture", GameManager.curHomeFurniture);
+                break;
+            
+            case 2:
+            
+                changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
+                GameManager.curRoomFurniture++;
+                PlayerPrefs.SetInt("curRoomFurniture", GameManager.curRoomFurniture);
+                break;
+            
+            case 3:
+            
+                changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
+                GameManager.curRoomFurniture++;
+                PlayerPrefs.SetInt("curRoomFurniture", GameManager.curRoomFurniture);
+                changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
+                GameManager.curHomeFurniture++;
+                PlayerPrefs.SetInt("curHomeFurniture", GameManager.curHomeFurniture);
+                break;
+            }
+
         }
     }
-    // public void FurShopLoad()
+    public void FurShopLoad()
 
-    // {
-    //     GameManager.curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
-    //     GameManager.curRoomFurniture = PlayerPrefs.GetInt("curRoomFurniture", 0);
-    //     GameManager.curHomeFurniture = PlayerPrefs.GetInt("curHomeFurniture", 0);
-    //     if (GameManager.curHomeFurniture != 0)
-    //     {
-    //         for (int i = 0; i <= GameManager.curFurnitureItem; i++)
-    //         {
-    //             changeFurnitureItem[i].transform.Find("Text").GetComponent<Text>().text = FurItemName[i];
-    //             changeFurnitureItem[i].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[i];
-    //             changeFurnitureItem[i].transform.Find("Button").gameObject.SetActive(false);
-    //             changeFurnitureItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
-    //         }
+    {
+        GameManager.curFurnitureItem = PlayerPrefs.GetInt("curFurnitureItem", 0);
+        GameManager.curRoomFurniture = PlayerPrefs.GetInt("curRoomFurniture", 0);
+        GameManager.curHomeFurniture = PlayerPrefs.GetInt("curHomeFurniture", 0);
+        if (GameManager.curHomeFurniture != 0)
+        {
+            for (int i = 0; i <= GameManager.curFurnitureItem - 1; i++)
+            {
+                changeFurnitureItem[i].transform.Find("Text").GetComponent<Text>().text = FurItemName[i];
+                changeFurnitureItem[i].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[i];
+                changeFurnitureItem[i].transform.Find("Button").gameObject.SetActive(false);
+                changeFurnitureItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
+            }
 
-    //     }
-    //     if (GameManager.curHomeFurniture > 0 && GameManager.curRoomFurniture > 0)
-    //     {
-    //         changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture];
-    //         changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture];
-    //     }
-    // }
+        }
+        if (GameManager.curHomeFurniture > 0 && GameManager.curRoomFurniture > 0)
+        {
+            changeHomeObj.GetComponent<Image>().sprite = homeFurniture[GameManager.curHomeFurniture -1];
+            changeRoomObj.GetComponent<Image>().sprite = roomFurniture[GameManager.curRoomFurniture -1];
+        }
+    }
     #endregion
 
     #region BumShop methods
@@ -852,7 +905,7 @@ public class MainScript : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
     #region Saving
     public void SavePlayer()
