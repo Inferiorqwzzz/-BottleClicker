@@ -304,8 +304,8 @@ public class MainScript : MonoBehaviour
     }
     public void BuyFurniture()
     {
-        //if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
-        //{
+        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        {
             GameManager.score = GameManager.score - pricesFurniture[GameManager.curFurnitureItem];
             PlayerPrefs.SetInt("score", GameManager.score);
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[GameManager.curFurnitureItem];
@@ -314,7 +314,7 @@ public class MainScript : MonoBehaviour
             changeFurnitureItem[GameManager.curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
             GameManager.curFurnitureItem++;
             PlayerPrefs.SetInt("curFurnitureItem", GameManager.curFurnitureItem);
-        //}
+        }
     }
     // public void FurShopLoad()
 
