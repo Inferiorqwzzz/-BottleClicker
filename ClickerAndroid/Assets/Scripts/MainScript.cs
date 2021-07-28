@@ -70,7 +70,7 @@ public class MainScript : MonoBehaviour
         FurShopLoad();
         UpgShopLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 12300);
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
     
 
