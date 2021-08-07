@@ -51,9 +51,6 @@ public class GameManager : MonoBehaviour
     {
     
 
-        //     print("FurITEM" + curFurnitureItem);
-        //     print ("homeSPRITE" + curHomeFurniture);
-        //     print("RoomSprite" + curRoomFurniture);
     }
 
     public void DeleteProgress()

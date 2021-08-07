@@ -33,7 +33,6 @@ public class MainScript : MonoBehaviour
     #endregion
     void Start()
     {
-        GameManager gm = GetComponent<GameManager>();
         if (GameManager.score > 0 || bumsLevels[0] > 0 || upgLevels [0] > 0 || GameManager.curFurnitureItem > 0)
         {
             FirstTimePlaying = 0;
