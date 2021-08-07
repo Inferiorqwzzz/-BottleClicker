@@ -20,6 +20,12 @@ public class MainScript : MonoBehaviour
     public int[] bumsLevels = new int[13];
     public int[] upgLevels = new int[13];
 
+    public GameObject buyAudio;
+
+    public GameObject slideShow;
+    
+    public int FirstTimePlaying; 
+   
 
 
 
@@ -27,18 +33,25 @@ public class MainScript : MonoBehaviour
     #endregion
     void Start()
     {
+        GameManager gm = GetComponent<GameManager>();
+        if (GameManager.score > 0 || bumsLevels[0] > 0 || upgLevels [0] > 0 || GameManager.curFurnitureItem > 0)
+        {
+            FirstTimePlaying = 0;
+        }
+        else 
+        {
+        FirstTimePlaying = 1;
+        }
         StartCoroutine(ScorePerSec());
         LoadInformation();
         LoadLocations();
-        LoadPlayer();
         idleInfo.text = "Пока вас не было бомжи принесли " + GameManager.toAddFromTime + " бутылок";
-
 
     }
     public void Update()
 
     {
-
+    
 
         passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
         switch (toGetSuffix(GameManager.score))
@@ -65,12 +78,14 @@ public class MainScript : MonoBehaviour
     }
     public void LoadInformation()
     {
+
         LoadPlayer();
         BumShopLoad();
         FurShopLoad();
         UpgShopLoad();
+        SlideShowLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1);
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 20000000);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
     
 
@@ -79,6 +94,24 @@ public class MainScript : MonoBehaviour
 
 
     }
+    public void SlideShowDisable()
+    {
+        slideShow.SetActive(false);
+    }
+    public void SlideShowLoad()
+    {
+        
+        PlayerPrefs.GetInt("FirstTimePlaying", 1);
+        if (FirstTimePlaying == 1)
+        {
+            slideShow.SetActive(true);        
+        }
+        else 
+        {
+            slideShow.SetActive(false);
+        }
+}
+
     public void Incriment()
     {
 
@@ -332,14 +365,17 @@ public class MainScript : MonoBehaviour
     {
         if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
         {
+        
+            buyAudio.GetComponent<AudioSource>().Play();
             GameManager.score = GameManager.score - pricesFurniture[GameManager.curFurnitureItem];
             PlayerPrefs.SetInt("score", GameManager.score);
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[GameManager.curFurnitureItem];
-            changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[GameManager.curFurnitureItem];
+            changeFurnitureItem [GameManager.curFurnitureItem].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[GameManager.curFurnitureItem];
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Button").gameObject.SetActive(false);
             changeFurnitureItem[GameManager.curFurnitureItem + 1].transform.Find("Button").gameObject.SetActive(true);
             GameManager.curFurnitureItem++;
             PlayerPrefs.SetInt("curFurnitureItem", GameManager.curFurnitureItem);
+        
             switch(home1room2)
             {
             case 1:
@@ -397,6 +433,7 @@ public class MainScript : MonoBehaviour
     #region BumShop methods
     public void BuyBum(int bum)
     {
+        buyAudio.GetComponent<AudioSource>().Play();
         switch (bum)
         {
             case 0:
@@ -651,6 +688,7 @@ public class MainScript : MonoBehaviour
     #region UpgradeShop Methods
     public void BuyUpgrades(int upg)
     {
+        buyAudio.GetComponent<AudioSource>().Play();
         switch (upg)
         {
             case 0:
@@ -935,6 +973,7 @@ public class MainScript : MonoBehaviour
         {
             pricesUpgrades[i] = data.pricesOfUpgrades[i];
         }
+        
     }
     public void DeletePlayer()
     {

@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
-
+        
         startTime = minutes + hours * 60 + days * 1440 + months * 1296000;
         timeWhenClosingGame = PlayerPrefs.GetInt("curtime", startTime);
         passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
@@ -45,11 +45,11 @@ public class GameManager : MonoBehaviour
         print("start time " + startTime);
         print("time lasted" + toAddFromTime);
         print("time when closing a game" + timeWhenClosingGame);
-
+     
     }
     public void Update()
     {
-
+    
 
         //     print("FurITEM" + curFurnitureItem);
         //     print ("homeSPRITE" + curHomeFurniture);
@@ -62,8 +62,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
         mainScript.DeletePlayer();
         print("deleted");
-        SceneManager.LoadScene("SampleScene");
-
+        SceneManager.LoadScene ("SampleScene");
 
     }
     IEnumerator toWriteTime()

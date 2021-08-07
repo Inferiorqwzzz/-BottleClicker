@@ -10,7 +10,7 @@ public int[] PricesOfBums;
 public int [] pricesOfUpgrades;
 public int [] LevelsOfUpgrades;
 
-
+public int PlayFirstTIme;
 public PlayerData (MainScript mainScript)
 {
 LevelsOfBums = new int[13];
@@ -35,6 +35,8 @@ for (int i = 0; i < 13; i++)
 {
    pricesOfUpgrades[i] = mainScript.pricesUpgrades[i];
 }
+
+
 }
 
 }
