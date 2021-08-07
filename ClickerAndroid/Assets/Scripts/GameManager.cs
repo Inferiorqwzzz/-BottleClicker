@@ -33,8 +33,7 @@ public class GameManager : MonoBehaviour
         startTime = minutes + hours * 60 + days * 1440 + months * 1296000;
         timeWhenClosingGame = PlayerPrefs.GetInt("curtime", startTime);
         passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
-        toAddFromTime = (startTime - timeWhenClosingGame) * 60 * passiveGain;
-
+        toAddFromTime = (startTime - timeWhenClosingGame) * 60 * passiveGain / 5;
         if (toAddFromTime < 0)
         toAddFromTime = 2000000000;
         score = PlayerPrefs.GetInt("score", 0);
