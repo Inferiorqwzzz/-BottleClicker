@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Intreal.inc
   productName: ClickerAndroid
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -762,10 +762,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: c5819a5c-985c-49e1-80ca-cf9f7a1543e2
+  cloudProjectId: 5c021da1-03bd-446a-be99-36a705f77832
   framebufferDepthMemorylessMode: 0
-  projectName: ANDROIDCLK
-  organizationId: frostlightqwzzz
+  projectName: ClickerAndroid
+  organizationId: intreal-inc
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
