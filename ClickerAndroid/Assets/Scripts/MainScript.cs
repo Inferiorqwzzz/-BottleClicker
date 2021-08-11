@@ -12,7 +12,9 @@ public class MainScript : MonoBehaviour
     public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BumShopSprites, UpgShopSprites;
     public string[] FurItemName, UpgItemName, BumItemName;
     public GameObject changeRoomObj, changeHomeObj;
-    public int[] pricesFurniture, pricesUpgrades, startingPricesOfUpgrades, pricesBums, startingPricesOfBums;
+    public int[] pricesFurniture, pricesUpgrades, startingPricesOfUpgrades, startingPricesOfBums;
+
+    public double[] pricesBums; 
 
     public int[] bumsGains, upgClickGains;
     public GameObject[] changeFurnitureItem, changeUpgradeItem, changeBumItem;
@@ -22,9 +24,11 @@ public class MainScript : MonoBehaviour
 
     public GameObject buyAudio;
 
-    public GameObject slideShow;
+    public GameObject slideShow, startPan;
     
-    public int FirstTimePlaying; 
+    public int slideShowState, startPanState;
+
+    public GameObject floatingText;
    
 
 
@@ -33,14 +37,7 @@ public class MainScript : MonoBehaviour
     #endregion
     void Start()
     {
-        if (GameManager.score > 0 || bumsLevels[0] > 0 || upgLevels [0] > 0 || GameManager.curFurnitureItem > 0)
-        {
-            FirstTimePlaying = 0;
-        }
-        else 
-        {
-        FirstTimePlaying = 1;
-        }
+        
         StartCoroutine(ScorePerSec());
         LoadInformation();
         LoadLocations();
@@ -50,7 +47,6 @@ public class MainScript : MonoBehaviour
     public void Update()
 
     {
-    
 
         passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
         switch (toGetSuffix(GameManager.score))
@@ -72,7 +68,7 @@ public class MainScript : MonoBehaviour
                 activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
                 break;
         }
-
+       
 
     }
     public void LoadInformation()
@@ -83,11 +79,12 @@ public class MainScript : MonoBehaviour
         FurShopLoad();
         UpgShopLoad();
         SlideShowLoad();
+        StartPanLoad();
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 20000000);
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1 );
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
-    
-
+        startPanState = PlayerPrefs.GetInt("startPanState", 1);
+        slideShowState = PlayerPrefs.GetInt("slideShowState", 1);
 
 
 
@@ -96,27 +93,54 @@ public class MainScript : MonoBehaviour
     public void SlideShowDisable()
     {
         slideShow.SetActive(false);
+        slideShowState = 0; 
+        PlayerPrefs.SetInt("slideShowState", slideShowState);
     }
-    public void SlideShowLoad()
-    {
-        
-        PlayerPrefs.GetInt("FirstTimePlaying", 1);
-        if (FirstTimePlaying == 1)
-        {
-            slideShow.SetActive(true);        
-        }
-        else 
-        {
-            slideShow.SetActive(false);
-        }
+    public void startPanDisable()
+{
+    startPan.SetActive(false); 
+    startPanState = 0; 
+    PlayerPrefs.SetInt("startPanState", startPanState);
 }
+public void SlideShowLoad()
+{
+    if (slideShowState == 1)
+    {
+    slideShow.SetActive(true);
+    }
+    else
+    {
+        slideShow.SetActive(false);
+    }
+}
+public void StartPanLoad()
+{
+    if (startPanState == 1)
+    {
+    startPan.SetActive(true);
+    }
+    else
+    {
+        startPan.SetActive(false);
+    }
+}
+
 
     public void Incriment()
     {
-
+        
         GameManager.score += GameManager.gainOnClick;
         PlayerPrefs.SetInt("score", GameManager.score);
+        ShowClick("" + GameManager.gainOnClick);
     }
+    void ShowClick(string text)
+{
+    if (floatingText)
+        {
+            GameObject prefab = Instantiate (floatingText, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
+            prefab.GetComponentInChildren<TextMesh>().text = text;
+        }
+}
     IEnumerator ScorePerSec()
     {
         yield return new WaitForSeconds(1f);
@@ -636,17 +660,31 @@ public class MainScript : MonoBehaviour
     }
     public void BumManipulator1(int bum)
     {
-        GameManager.score = GameManager.score - pricesBums[bum];
+        GameManager.score = GameManager.score - Convert.ToInt32 (pricesBums[bum]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
-        SavePlayer();
-        pricesBums[bum] = pricesBums[bum] * 130 / 100;
+        pricesBums[bum] = pricesBums[bum] * 1.3;
+        switch (toGetSuffix(Convert.ToInt32(pricesBums[bum])))
+        {
+            case 0:
+                suffix = string.Empty;
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+            case 1:
+                suffix = string.Empty;
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+            case 2:
+                suffix = "M";
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesBums[bum]))) + suffix);                break;
+            case 3:
+                suffix = "B";
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesBums[bum]))) + suffix);                break;
+        }
         SavePlayer();
         changeBumItem[bum].transform.Find("Text").GetComponent<Text>().text = BumItemName[bum];
         changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
-        changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesBums[bum]}");
+       
         changeBumItem[bum].transform.Find("Image").GetComponent<Image>().sprite = BumShopSprites[bum];
         changeBumItem[bum + 1].transform.Find("Button").gameObject.SetActive(true);
         GameManager.curBumItem++;
@@ -654,16 +692,30 @@ public class MainScript : MonoBehaviour
     }
     public void BumManipulator2(int bum)
     {
-        GameManager.score = GameManager.score - pricesBums[bum];
+        GameManager.score = GameManager.score - Convert.ToInt32 (pricesBums[bum]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
         SavePlayer();
-        pricesBums[bum] = pricesBums[bum] * 130 / 100;
+        pricesBums[bum] = pricesBums[bum] * 1.3;
+        switch (toGetSuffix(Convert.ToInt32(pricesBums[bum])))
+        {
+            case 0:
+                suffix = string.Empty;
+                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+            case 1:
+                suffix = string.Empty;
+                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+            case 2:
+                suffix = "M";
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" +Math.Round (toShortNumber(Convert.ToInt32 (pricesBums[bum]))) + suffix);                break;
+            case 3:
+                suffix = "B";
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesBums[bum]))) + suffix);                break;
+        }
         SavePlayer();
         changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
-        changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesBums[bum]}");
     }
     public void BumShopLoad()
     {
@@ -1002,7 +1054,9 @@ public class MainScript : MonoBehaviour
 
 
     #endregion
+
 }
+
 
 
 

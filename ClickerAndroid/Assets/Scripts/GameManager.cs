@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     public static int curUpgItem;
 
+
     public static int minutes = int.Parse(DateTime.Now.ToString("mm"));
 
     public static int hours = int.Parse(DateTime.Now.ToString("HH"));
@@ -27,41 +28,36 @@ public class GameManager : MonoBehaviour
 
     public static int timeWhenClosingGame, startTime, toAddFromTime;
 
-    public void Awake()
+    public void Start()
     {
-        
         startTime = minutes + hours * 60 + days * 1440 + months * 1296000;
         timeWhenClosingGame = PlayerPrefs.GetInt("curtime", startTime);
         passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
         toAddFromTime = (startTime - timeWhenClosingGame) * 60 * passiveGain / 5;
+        PlayerPrefs.SetInt("toAddFromTime", toAddFromTime);
         if (toAddFromTime < 0)
         toAddFromTime = 2000000000;
-        score = PlayerPrefs.GetInt("score", 0);
-        score += toAddFromTime;
-        PlayerPrefs.SetInt("score", score);
-    }
-    public void Start()
-    {
         StartCoroutine(toWriteTime());
-        print("start time " + startTime);
-        print("time lasted" + toAddFromTime);
-        print("time when closing a game" + timeWhenClosingGame);
-     
-    }
-    public void Update()
-    {
-    
-
+        
     }
 
-    public void DeleteProgress()
+    public void DeleteProgressAndReloadScene()
     {
         MainScript mainScript = GetComponent<MainScript>();
         PlayerPrefs.DeleteAll();
         mainScript.DeletePlayer();
         print("deleted");
         SceneManager.LoadScene ("SampleScene");
-
+        
+    }
+    public void DeleteProgress()
+    {
+        MainScript mainScript = GetComponent<MainScript>();
+        PlayerPrefs.DeleteAll();
+        mainScript.DeletePlayer();
+        print("deleted");
+        mainScript.slideShowState = 0;
+        
     }
     IEnumerator toWriteTime()
     {
@@ -85,5 +81,20 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(toWriteTime());
     }
+    public static void DoubleFromAdd ()
+    {
+        PlayerPrefs.GetInt("toAddFromTime", toAddFromTime);
 
+        score = PlayerPrefs.GetInt("score", 0);
+        score += toAddFromTime;
+        score += toAddFromTime;
+        PlayerPrefs.SetInt("score", score);
+        
+    }
+    public void toAddFromTimeMethod ()
+    {
+        score = PlayerPrefs.GetInt("score", 0);
+        score += toAddFromTime;
+        PlayerPrefs.SetInt("score", score);
+    }
 }
