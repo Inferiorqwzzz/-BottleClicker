@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DestroyInSec : MonoBehaviour
 {
-    [SerializeField] private float secondsToDestroy = 0.1f;
+    [SerializeField] private float secondsToDestroy = 10f;
     void Start()
     {
         Destroy (gameObject, secondsToDestroy);

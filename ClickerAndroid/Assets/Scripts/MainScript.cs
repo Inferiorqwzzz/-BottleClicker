@@ -29,15 +29,18 @@ public class MainScript : MonoBehaviour
     public int slideShowState, startPanState;
 
     public GameObject floatingText;
-   
+    
+    UnityEngine.Random random = new UnityEngine.Random(); 
 
+    public Vector3 center, size; 
 
 
     string suffix;
     #endregion
     void Start()
     {
-        
+        slideShowState = 1;
+        startPanState = 1;
         StartCoroutine(ScorePerSec());
         LoadInformation();
         LoadLocations();
@@ -47,6 +50,7 @@ public class MainScript : MonoBehaviour
     public void Update()
 
     {
+        Debug.Log("Slideshow " + slideShowState + " StartPan " + startPanState);
 
         passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
         switch (toGetSuffix(GameManager.score))
@@ -78,13 +82,13 @@ public class MainScript : MonoBehaviour
         BumShopLoad();
         FurShopLoad();
         UpgShopLoad();
-        SlideShowLoad();
-        StartPanLoad();
+        
         GameManager.score = PlayerPrefs.GetInt("score", 0);
         GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1 );
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
         startPanState = PlayerPrefs.GetInt("startPanState", 1);
         slideShowState = PlayerPrefs.GetInt("slideShowState", 1);
+        SlideShowLoad();
 
 
 
@@ -94,36 +98,28 @@ public class MainScript : MonoBehaviour
     {
         slideShow.SetActive(false);
         slideShowState = 0; 
-        PlayerPrefs.SetInt("slideShowState", slideShowState);
+        PlayerPrefs.SetInt("slideShowState", 0);
     }
     public void startPanDisable()
 {
     startPan.SetActive(false); 
     startPanState = 0; 
-    PlayerPrefs.SetInt("startPanState", startPanState);
+    PlayerPrefs.SetInt("startPanState", 0);
 }
 public void SlideShowLoad()
 {
     if (slideShowState == 1)
     {
+    startPan.SetActive(true);
     slideShow.SetActive(true);
     }
     else
     {
+        startPan.SetActive(false);
         slideShow.SetActive(false);
     }
 }
-public void StartPanLoad()
-{
-    if (startPanState == 1)
-    {
-    startPan.SetActive(true);
-    }
-    else
-    {
-        startPan.SetActive(false);
-    }
-}
+
 
 
     public void Incriment()
@@ -135,9 +131,12 @@ public void StartPanLoad()
     }
     void ShowClick(string text)
 {
+    
     if (floatingText)
         {
-            GameObject prefab = Instantiate (floatingText, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
+            
+            Vector3 textPos = center + new Vector3 (UnityEngine.Random.Range(-size.x/2, +size.x/2), UnityEngine.Random.Range(-size.y/2, +size.y/2), -3);
+            GameObject prefab = Instantiate (floatingText, textPos, Quaternion.identity); 
             prefab.GetComponentInChildren<TextMesh>().text = text;
         }
 }
@@ -354,7 +353,10 @@ public void StartPanLoad()
     }
     public void LoadLocations()
     {
+        if (GameManager.toAddFromTime > 0)
         Idle.SetActive(true);
+        else
+        Idle.SetActive(false);
         Street.SetActive(true);
         Room.SetActive(false);
         Home.SetActive(false);
@@ -1055,6 +1057,18 @@ public void StartPanLoad()
 
     #endregion
 
+    public void offMusic()
+    {
+        if (gameObject.GetComponent<AudioSource>().mute == false)
+        {
+        gameObject.GetComponent<AudioSource>().mute = true; 
+        }
+        else 
+        {
+            gameObject.GetComponent<AudioSource>().mute = false; 
+        }
+    }
+    
 }
 
 

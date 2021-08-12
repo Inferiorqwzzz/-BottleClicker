@@ -5,15 +5,20 @@ using UnityEngine.Advertisements;
 
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
+    public static int bonusNum; 
 
+    public GameManager gm;
     void Start()
     {
-        Advertisement.Initialize("4248703"); 
+        gm = GetComponent<GameManager>();
+        Advertisement.Initialize("4248703");
         Advertisement.AddListener(this);
     }
 
-    public void PlayRewardedAdd()
+
+    public void PlayRewardedAdd(int num)
     {
+        bonusNum = num;
         if (Advertisement.IsReady("Rewarded_Android"))
         {
             Advertisement.Show("Rewarded_Android");
@@ -31,7 +36,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsDidError(string message)
     {
-       Debug.Log("Error" + message);
+        Debug.Log("Error" + message);
     }
 
     public void OnUnityAdsDidStart(string placementId)
@@ -42,9 +47,43 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         Debug.Log("Video is finished");
-        if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
+        switch (bonusNum)
         {
-            GameManager.DoubleFromAdd();
+            case 0:
+                if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
+                {
+                    Debug.Log("DOUBLEFROMADD");
+                    gm.DoubleFromAdd();
+                }
+                break;
+            case 1:
+                if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
+                {
+                    Debug.Log("DOUBLECOLLECT");
+                    gm.DoubleCollect();
+                }
+                break;
+
+            case 2:
+                {
+                    if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
+                    {
+                        Debug.Log("DOUBLECLICK");
+                        gm.DoubleClick();
+                    }
+                    break;
+                }
+            case 3:
+                {
+                    if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
+                    {
+                        Debug.Log("PLUSFROMADD");
+                        gm.PlusFromAdd();
+                    }
+                    break;
+                }
         }
+
     }
+
 }

@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 
     public static int timeWhenClosingGame, startTime, toAddFromTime;
 
+    
+
     public void Start()
     {
         startTime = minutes + hours * 60 + days * 1440 + months * 1296000;
@@ -40,7 +42,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(toWriteTime());
         
     }
-
+     public void Update()
+     {
+         Debug.Log("gain on clikc "+ gainOnClick);
+         Debug.Log("passive gain" + passiveGain);
+     }
     public void DeleteProgressAndReloadScene()
     {
         MainScript mainScript = GetComponent<MainScript>();
@@ -56,7 +62,6 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
         mainScript.DeletePlayer();
         print("deleted");
-        mainScript.slideShowState = 0;
         
     }
     IEnumerator toWriteTime()
@@ -81,20 +86,59 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(toWriteTime());
     }
-    public static void DoubleFromAdd ()
+    public void DoubleFromAdd ()
     {
         PlayerPrefs.GetInt("toAddFromTime", toAddFromTime);
 
         score = PlayerPrefs.GetInt("score", 0);
         score += toAddFromTime;
         score += toAddFromTime;
+
         PlayerPrefs.SetInt("score", score);
         
     }
+    public void PlusFromAdd()
+    {
+        score = PlayerPrefs.GetInt("score", 0);
+        score += 50000;
+        PlayerPrefs.SetInt("score", score);
+    }
+
     public void toAddFromTimeMethod ()
     {
         score = PlayerPrefs.GetInt("score", 0);
         score += toAddFromTime;
         PlayerPrefs.SetInt("score", score);
+    }
+
+    public void DoubleClick()
+    {
+            
+            gainOnClick = gainOnClick * 2;
+            StartCoroutine(WaitForSec(60f, 1));
+             
+    }
+
+    public void DoubleCollect()
+    {
+        passiveGain *= 2; 
+        StartCoroutine(WaitForSec(60f, 0));
+
+    }
+    
+    public IEnumerator WaitForSec(float seconds, int whatToDo)
+    {
+        Debug.Log("waiting");
+        yield return new WaitForSeconds(seconds);
+        Debug.Log("Waited");
+
+        if (whatToDo == 0)
+        {
+            passiveGain /=2; 
+        }
+        else 
+        {
+            gainOnClick /=2;
+        }
     }
 }
