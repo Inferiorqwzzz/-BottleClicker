@@ -37,10 +37,14 @@ public class MainScript : MonoBehaviour
 
     string suffix;
     #endregion
-    void Start()
+    void Awake()
     {
         slideShowState = 1;
         startPanState = 1;
+    }
+    void Start()
+    {
+        
         StartCoroutine(ScorePerSec());
         LoadInformation();
         LoadLocations();
@@ -108,7 +112,7 @@ public class MainScript : MonoBehaviour
 }
 public void SlideShowLoad()
 {
-    if (slideShowState == 1)
+    if (slideShowState == 1 && GameManager.score == 0)
     {
     startPan.SetActive(true);
     slideShow.SetActive(true);
