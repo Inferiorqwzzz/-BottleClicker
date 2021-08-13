@@ -7,7 +7,7 @@ public class PlayerData
 public int[] LevelsOfBums;
 public double[] PricesOfBums;
 
-public int [] pricesOfUpgrades;
+public double [] pricesOfUpgrades;
 public int [] LevelsOfUpgrades;
 
 public PlayerData (MainScript mainScript)
@@ -29,7 +29,7 @@ for (int i = 0; i < 13; i++)
 {
    LevelsOfUpgrades[i] = mainScript.upgLevels[i];
 }
-pricesOfUpgrades = new int[13];
+pricesOfUpgrades = new double[13];
 for (int i = 0; i < 13; i++)
 {
    pricesOfUpgrades[i] = mainScript.pricesUpgrades[i];

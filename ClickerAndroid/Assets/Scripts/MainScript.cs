@@ -13,9 +13,9 @@ public class MainScript : MonoBehaviour
     public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BumShopSprites, UpgShopSprites;
     public string[] FurItemName, UpgItemName, BumItemName;
     public GameObject changeRoomObj, changeHomeObj;
-    public int[] pricesFurniture, pricesUpgrades, startingPricesOfUpgrades, startingPricesOfBums;
+    public int[] pricesFurniture, startingPricesOfUpgrades, startingPricesOfBums;
 
-    public double[] pricesBums; 
+    public double[] pricesBums, pricesUpgrades; 
 
     public int[] bumsGains, upgClickGains;
     public GameObject[] changeFurnitureItem, changeUpgradeItem, changeBumItem;
@@ -45,10 +45,10 @@ public class MainScript : MonoBehaviour
     }
     void Start()
     {
-        if (GameManager.gainOnClick == 0)
+        if (GameManager.gainOnClick == 0 )
       
             GameManager.gainOnClick = 1;
-        
+         
         slideShowState = 1;
         startPanState = 1;
         
@@ -95,7 +95,7 @@ public class MainScript : MonoBehaviour
         UpgShopLoad();
         
         GameManager.score = PlayerPrefs.GetInt("score", 0);
-        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1 );
+        GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
         startPanState = PlayerPrefs.GetInt("startPanState", 1);
         slideShowState = PlayerPrefs.GetInt("slideShowState", 1);
@@ -146,7 +146,7 @@ public void SlideShowLoad()
     if (floatingText)
         {
             
-            Vector3 textPos = center + new Vector3 (UnityEngine.Random.Range(-size.x/2, +size.x/2), UnityEngine.Random.Range(-size.y/2, +size.y/2), -3);
+            Vector3 textPos = center; //+ new Vector3 (UnityEngine.Random.Range(-size.x/2, +size.x/2), UnityEngine.Random.Range(-size.y/2, +size.y/2), -3);
             GameObject prefab = Instantiate (floatingText, textPos, Quaternion.identity); 
             prefab.GetComponentInChildren<TextMesh>().text = text;
         }
@@ -697,7 +697,6 @@ public void SlideShowLoad()
         SavePlayer();
         changeBumItem[bum].transform.Find("Text").GetComponent<Text>().text = BumItemName[bum];
         changeBumItem[bum].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[bum]);
-       
         changeBumItem[bum].transform.Find("Image").GetComponent<Image>().sprite = BumShopSprites[bum];
         changeBumItem[bum + 1].transform.Find("Button").gameObject.SetActive(true);
         GameManager.curBumItem++;
@@ -956,18 +955,31 @@ public void SlideShowLoad()
     }
     public void BuyManipulator1(int upg)
     {
-        GameManager.score = GameManager.score - pricesUpgrades[upg];
+        GameManager.score = GameManager.score - Convert.ToInt32(pricesUpgrades[upg]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
         PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
-        pricesUpgrades[upg] = pricesUpgrades[upg] * 130 / 100;
-        SavePlayer();
-        print(pricesUpgrades[upg]);
+        pricesUpgrades[upg] = pricesUpgrades[upg] * 1.3;
         upgLevels[upg]++;
+        switch (toGetSuffix(Convert.ToInt32(pricesUpgrades[upg])))
+        {
+            case 0:
+                suffix = string.Empty;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+            case 1:
+                suffix = string.Empty;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+            case 2:
+                suffix = "M";
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesUpgrades[upg]))) + suffix);                break;
+            case 3:
+                suffix = "B";
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesUpgrades[upg]))) + suffix);                break;
+        }
+        
         SavePlayer();
         changeUpgradeItem[upg].transform.Find("Text").GetComponent<Text>().text = UpgItemName[upg];
         changeUpgradeItem[upg].transform.Find("Text (2)").GetComponent<Text>().text = ("Ур: " + upgLevels[upg]);
-        changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesUpgrades[upg]}");
         changeUpgradeItem[upg].transform.Find("Image").GetComponent<Image>().sprite = UpgShopSprites[upg];
         changeUpgradeItem[upg + 1].transform.Find("Button").gameObject.SetActive(true);
         GameManager.curUpgItem++;
@@ -976,17 +988,32 @@ public void SlideShowLoad()
 
     public void BuyManipulator2(int upg)
     {
-        GameManager.score = GameManager.score - pricesUpgrades[upg];
+        GameManager.score = GameManager.score - Convert.ToInt32(pricesUpgrades[upg]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
         PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
-        pricesUpgrades[upg] = pricesUpgrades[upg] * 130 / 100;
-        SavePlayer();
+        pricesUpgrades[upg] = pricesUpgrades[upg] * 1.3;
         upgLevels[upg]++;
+        switch (toGetSuffix(Convert.ToInt32(pricesUpgrades[upg])))
+        {
+            case 0:
+                suffix = string.Empty;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+            case 1:
+                suffix = string.Empty;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+            case 2:
+                suffix = "M";
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesUpgrades[upg]))) + suffix);                break;
+            case 3:
+                suffix = "B";
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesUpgrades[upg]))) + suffix);                break;
+        }
+
+        
         SavePlayer();
 
         changeUpgradeItem[upg].transform.Find("Text (2)").GetComponent<Text>().text = ("Ур: " + upgLevels[upg]);
-        changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesUpgrades[upg]}");
     }
 
     public void UpgShopLoad()
