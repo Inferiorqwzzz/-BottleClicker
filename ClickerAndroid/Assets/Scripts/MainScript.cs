@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class MainScript : MonoBehaviour
 {
@@ -39,11 +40,13 @@ public class MainScript : MonoBehaviour
     #endregion
     void Awake()
     {
-        slideShowState = 1;
-        startPanState = 1;
+      if (slideShowState == 1 && GameManager.score == 0 && bumsLevels[0] == 0 && upgLevels [0] == 0 && GameManager.curFurnitureItem == 0)
+       SceneManager.LoadScene ("SampleScene");  
     }
     void Start()
     {
+        slideShowState = 1;
+        startPanState = 1;
         
         StartCoroutine(ScorePerSec());
         LoadInformation();
@@ -112,7 +115,7 @@ public class MainScript : MonoBehaviour
 }
 public void SlideShowLoad()
 {
-    if (slideShowState == 1 && GameManager.score == 0)
+    if (slideShowState == 1 && GameManager.score == 0 && bumsLevels[0] == 0 && upgLevels [0] == 0 && GameManager.curFurnitureItem == 0)
     {
     startPan.SetActive(true);
     slideShow.SetActive(true);

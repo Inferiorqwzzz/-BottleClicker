@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     }
      public void Update()
      {
-         Debug.Log("gain on clikc "+ gainOnClick);
+         Debug.Log("cur FUR "+ curFurnitureItem);
          Debug.Log("passive gain" + passiveGain);
      }
     public void DeleteProgressAndReloadScene()
