@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     
 
-    public void Start()
+    public void Awake()
     {
         startTime = minutes + hours * 60 + days * 1440 + months * 1296000;
         timeWhenClosingGame = PlayerPrefs.GetInt("curtime", startTime);
