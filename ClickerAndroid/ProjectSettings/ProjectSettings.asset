@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: ClickerAndroid
+  companyName: Intreal.inc
+  productName: Bottle Clicker
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -267,7 +267,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 30a36c157df897545bf7b9a6d092b31f, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -762,10 +762,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: c5819a5c-985c-49e1-80ca-cf9f7a1543e2
+  cloudProjectId: 5c021da1-03bd-446a-be99-36a705f77832
   framebufferDepthMemorylessMode: 0
-  projectName: ANDROIDCLK
-  organizationId: frostlightqwzzz
+  projectName: Bottle Clicker
+  organizationId: intreal-inc
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

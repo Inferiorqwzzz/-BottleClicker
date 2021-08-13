@@ -45,6 +45,10 @@ public class MainScript : MonoBehaviour
     }
     void Start()
     {
+        if (GameManager.gainOnClick == 0)
+      
+            GameManager.gainOnClick = 1;
+        
         slideShowState = 1;
         startPanState = 1;
         
