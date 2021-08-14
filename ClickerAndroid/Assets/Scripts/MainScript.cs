@@ -23,7 +23,7 @@ public class MainScript : MonoBehaviour
     public int[] bumsLevels = new int[13];
     public int[] upgLevels = new int[13];
 
-    public GameObject buyAudio;
+    public GameObject buyAudio, openBumsAudio, noMoneyAudio, openHomeAudio, bottleCLickAudio;
 
     public GameObject slideShow, startPan;
     
@@ -34,6 +34,8 @@ public class MainScript : MonoBehaviour
     UnityEngine.Random random = new UnityEngine.Random(); 
 
     public Vector3 center, size; 
+
+    private int soundActive, musicActive;
 
 
     string suffix;
@@ -55,6 +57,7 @@ public class MainScript : MonoBehaviour
         StartCoroutine(ScorePerSec());
         LoadInformation();
         LoadLocations();
+        loadMusicAndSound();
         idleInfo.text = "Пока вас не было бомжи принесли " + GameManager.toAddFromTime + " бутылок";
 
     }
@@ -100,7 +103,8 @@ public class MainScript : MonoBehaviour
         startPanState = PlayerPrefs.GetInt("startPanState", 1);
         slideShowState = PlayerPrefs.GetInt("slideShowState", 1);
         SlideShowLoad();
-
+        GameManager.gainOnClick = 10000;
+        
 
 
 
@@ -130,15 +134,13 @@ public void SlideShowLoad()
         slideShow.SetActive(false);
     }
 }
-
-
-
     public void Incriment()
     {
         
         GameManager.score += GameManager.gainOnClick;
         PlayerPrefs.SetInt("score", GameManager.score);
         ShowClick("" + GameManager.gainOnClick);
+        bottleCLickAudio.GetComponent<AudioSource>().Play();
     }
     void ShowClick(string text)
 {
@@ -147,8 +149,27 @@ public void SlideShowLoad()
         {
             
             Vector3 textPos = center; //+ new Vector3 (UnityEngine.Random.Range(-size.x/2, +size.x/2), UnityEngine.Random.Range(-size.y/2, +size.y/2), -3);
-            GameObject prefab = Instantiate (floatingText, textPos, Quaternion.identity); 
-            prefab.GetComponentInChildren<TextMesh>().text = text;
+            GameObject prefab = Instantiate (floatingText, textPos, Quaternion.identity);
+            switch (toGetSuffix(GameManager.gainOnClick))
+        {
+            case 0:
+                suffix = string.Empty;
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick) + suffix;
+                break;
+            case 1:
+                suffix = "K";
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick) + suffix;
+                break;
+            case 2:
+                suffix = "M";
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick).ToString("N1") + suffix;
+                break;
+            case 3:
+                suffix = "B";
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick).ToString("N1") + suffix;
+                break;
+        } 
+            
         }
 }
     IEnumerator ScorePerSec()
@@ -199,6 +220,7 @@ public void SlideShowLoad()
             break;
         case 2: // go to home 
         {
+            openHomeAudio.GetComponent<AudioSource>().Play();
             Street.SetActive(false);
             Room.SetActive(false);
             Home.SetActive(true);
@@ -242,6 +264,7 @@ public void SlideShowLoad()
         {
             if (Idle.activeSelf == false)
             {
+            openBumsAudio.GetComponent<AudioSource>().Play();
             Street.SetActive(false);
             FurnitureShop.SetActive(false);
             Bums.SetActive(true);
@@ -440,6 +463,8 @@ public void SlideShowLoad()
             }
 
         }
+        else 
+        noMoneyAudio.GetComponent<AudioSource>().Play();
     }
     public void FurShopLoad()
 
@@ -469,7 +494,7 @@ public void SlideShowLoad()
     #region BumShop methods
     public void BuyBum(int bum)
     {
-        buyAudio.GetComponent<AudioSource>().Play();
+        
         switch (bum)
         {
             case 0:
@@ -485,6 +510,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 1:
@@ -500,6 +526,8 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
+
                     break;
                 }
             case 2:
@@ -515,6 +543,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 3:
@@ -530,6 +559,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 4:
@@ -545,6 +575,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 5:
@@ -560,6 +591,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 6:
@@ -575,6 +607,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 7:
@@ -590,6 +623,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 8:
@@ -605,6 +639,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 9:
@@ -620,6 +655,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 10:
@@ -635,6 +671,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 11:
@@ -650,6 +687,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
             case 12:
@@ -665,6 +703,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    PlayNoBuyAudio();
                     break;
                 }
 
@@ -673,6 +712,7 @@ public void SlideShowLoad()
     }
     public void BumManipulator1(int bum)
     {
+        buyAudio.GetComponent<AudioSource>().Play();
         GameManager.score = GameManager.score - Convert.ToInt32 (pricesBums[bum]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
@@ -704,6 +744,7 @@ public void SlideShowLoad()
     }
     public void BumManipulator2(int bum)
     {
+        buyAudio.GetComponent<AudioSource>().Play();
         GameManager.score = GameManager.score - Convert.ToInt32 (pricesBums[bum]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
@@ -751,7 +792,7 @@ public void SlideShowLoad()
     #region UpgradeShop Methods
     public void BuyUpgrades(int upg)
     {
-        buyAudio.GetComponent<AudioSource>().Play();
+        
         switch (upg)
         {
             case 0:
@@ -768,6 +809,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 1:
@@ -783,6 +825,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 2:
@@ -798,6 +841,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 3:
@@ -813,6 +857,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 4:
@@ -828,6 +873,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 5:
@@ -843,6 +889,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 6:
@@ -858,6 +905,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 7:
@@ -873,6 +921,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 8:
@@ -888,6 +937,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 9:
@@ -903,6 +953,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 10:
@@ -918,6 +969,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 11:
@@ -933,6 +985,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
             case 12:
@@ -948,6 +1001,7 @@ public void SlideShowLoad()
                 }
                 else
                 {
+                    noMoneyAudio.GetComponent<AudioSource>().Play();
                     break;
                 }
         }
@@ -955,6 +1009,7 @@ public void SlideShowLoad()
     }
     public void BuyManipulator1(int upg)
     {
+        buyAudio.GetComponent<AudioSource>().Play();
         GameManager.score = GameManager.score - Convert.ToInt32(pricesUpgrades[upg]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
@@ -988,6 +1043,7 @@ public void SlideShowLoad()
 
     public void BuyManipulator2(int upg)
     {
+        buyAudio.GetComponent<AudioSource>().Play();
         GameManager.score = GameManager.score - Convert.ToInt32(pricesUpgrades[upg]);
         PlayerPrefs.SetInt("score", GameManager.score);
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
@@ -1100,11 +1156,72 @@ public void SlideShowLoad()
         if (gameObject.GetComponent<AudioSource>().mute == false)
         {
         gameObject.GetComponent<AudioSource>().mute = true; 
+        musicActive = 1;
+        PlayerPrefs.SetInt("musicActive", musicActive);
+        }
+        else 
+        {
+            gameObject.GetComponent<AudioSource>().mute = false; 
+            musicActive = 0;
+            PlayerPrefs.SetInt("musicActive", musicActive);
+        }
+    }
+    public void OffSounds()
+    {
+      if (buyAudio.GetComponent<AudioSource>().mute == false)
+        {
+        buyAudio.GetComponent<AudioSource>().mute = true; 
+        openBumsAudio.GetComponent<AudioSource>().mute = true; 
+        noMoneyAudio.GetComponent<AudioSource>().mute = true; 
+        openHomeAudio.GetComponent<AudioSource>().mute = true; 
+        bottleCLickAudio.GetComponent<AudioSource>().mute = true; 
+        soundActive = 1;
+        PlayerPrefs.SetInt("soundActive", soundActive);
+        }
+        else 
+        {
+        buyAudio.GetComponent<AudioSource>().mute = false; 
+        openBumsAudio.GetComponent<AudioSource>().mute = false; 
+        noMoneyAudio.GetComponent<AudioSource>().mute = false; 
+        openHomeAudio.GetComponent<AudioSource>().mute = false; 
+        bottleCLickAudio.GetComponent<AudioSource>().mute = false; 
+        soundActive = 0;
+        PlayerPrefs.SetInt("soundActive", soundActive);
+        }  
+    }
+    public void PlayNoBuyAudio()
+    {
+        noMoneyAudio.GetComponent<AudioSource>().Play();
+    }
+    public void loadMusicAndSound()
+    {
+        musicActive =  PlayerPrefs.GetInt("musicActive", musicActive);
+        soundActive = PlayerPrefs.GetInt("soundActive", soundActive);
+         if (musicActive == 1)
+        {
+        gameObject.GetComponent<AudioSource>().mute = true; 
         }
         else 
         {
             gameObject.GetComponent<AudioSource>().mute = false; 
         }
+
+        if (soundActive == 1)
+        {
+        buyAudio.GetComponent<AudioSource>().mute = true; 
+        openBumsAudio.GetComponent<AudioSource>().mute = true; 
+        noMoneyAudio.GetComponent<AudioSource>().mute = true; 
+        openHomeAudio.GetComponent<AudioSource>().mute = true; 
+        bottleCLickAudio.GetComponent<AudioSource>().mute = true; 
+        }
+        else 
+        {
+        buyAudio.GetComponent<AudioSource>().mute = false; 
+        openBumsAudio.GetComponent<AudioSource>().mute = false; 
+        noMoneyAudio.GetComponent<AudioSource>().mute = false; 
+        openHomeAudio.GetComponent<AudioSource>().mute = false; 
+        bottleCLickAudio.GetComponent<AudioSource>().mute = false; 
+        }  
     }
     
 }
