@@ -91,10 +91,9 @@ public class GameManager : MonoBehaviour
     {
          MainScript mainScript = GetComponent<MainScript>();
         PlayerPrefs.GetInt("toAddFromTime", toAddFromTime);
-
-        mainScript.score = PlayerPrefs.GetInt("mainScript.score", 0);
         mainScript.score += toAddFromTime;
         mainScript.score += toAddFromTime;
+       
 
         mainScript.SavePlayer();
         
@@ -102,15 +101,13 @@ public class GameManager : MonoBehaviour
     public void PlusFromAdd()
     {
          MainScript mainScript = GetComponent<MainScript>();
-        mainScript.score = PlayerPrefs.GetInt("mainScript.score", 0);
-        mainScript.score += 50000;
+        mainScript.score += gainOnClick * 100; 
         mainScript.SavePlayer();
     }
 
     public void toAddFromTimeMethod ()
     {
          MainScript mainScript = GetComponent<MainScript>();
-        mainScript.score = PlayerPrefs.GetInt("mainScript.score", 0);
         mainScript.score += toAddFromTime;
         mainScript.SavePlayer();
     }

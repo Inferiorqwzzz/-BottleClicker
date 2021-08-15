@@ -11124,6 +11124,7 @@ MonoBehaviour:
   musicOn: {fileID: 21300000, guid: 60cf5d2e00cf8824f8e2553bdb6deda0, type: 3}
   gmMusic: {fileID: 1961395223}
   gmSound: {fileID: 1152340976}
+  bonusText: {fileID: 1546298187}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -11206,6 +11207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 0}
+  ms: {fileID: 0}
   doubleClick: {fileID: 988492381}
   doublePassive: {fileID: 1830609212}
   plusScore: {fileID: 1141190976}
@@ -16380,17 +16382,6 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 11
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 541462877}
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -44353,6 +44344,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 1471953858125430276, guid: a2f6b7b9b249c6d44bfe7b8451336d55,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7467465941384045035, guid: a2f6b7b9b249c6d44bfe7b8451336d55,
         type: 3}

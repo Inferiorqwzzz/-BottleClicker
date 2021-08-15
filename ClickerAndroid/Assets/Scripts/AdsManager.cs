@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.UI;
+using System;
 
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
@@ -9,15 +11,23 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 
     public GameManager gm;
 
+    public MainScript ms;
+
     public GameObject doubleClick, doublePassive, plusScore; 
 
-    
+        
+
+    double writeTextValue = GameManager.gainOnClick * 100; 
     void Start()
     {
+        ;
         gm = GetComponent<GameManager>();
+        ms = GetComponent<MainScript>();
         Advertisement.Initialize("4248703");
         Advertisement.AddListener(this);
+        
     }
+    
 
 
     public void PlayRewardedAdd(int num)
@@ -113,5 +123,6 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
            StartCoroutine(GameObjectDisable(15, new GameObject [] {plusScore, doubleClick, doublePassive}));
     }
+    
 
 }

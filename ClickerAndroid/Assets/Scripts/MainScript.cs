@@ -42,8 +42,10 @@ public class MainScript : MonoBehaviour
     public Sprite soundOff, soundOn, musicOff, musicOn;
 
     public GameObject gmMusic, gmSound; 
-
     
+    public Text bonusText; 
+
+   double writeTextValue; 
     string suffix;
     #endregion
     void Awake()
@@ -61,11 +63,12 @@ public class MainScript : MonoBehaviour
         startPanState = 1;
         
         StartCoroutine(ScorePerSec());
+        
         LoadInformation();
         LoadLocations();
         loadMusicAndSound();
         idleInfo.text = "Пока вас не было бомжи принесли " + GameManager.toAddFromTime + " бутылок";
-
+        StartCoroutine(TextUpdate());
     }
     public void Update()
 
@@ -77,11 +80,11 @@ public class MainScript : MonoBehaviour
         {
             case 0:
                 suffix = string.Empty;
-                activeScoreValue.text = "" + toShortNumber(score) + suffix;
+                activeScoreValue.text = "" + toShortNumber(score).ToString() + suffix;
                 break;
             case 1:
                 suffix = string.Empty;
-                activeScoreValue.text = "" + toShortNumber(score) + suffix;
+                activeScoreValue.text = "" + toShortNumber(score).ToString() + suffix;
                 break;
             case 2:
                 suffix = "M";
@@ -109,7 +112,7 @@ public class MainScript : MonoBehaviour
         startPanState = PlayerPrefs.GetInt("startPanState", 1);
         slideShowState = PlayerPrefs.GetInt("slideShowState", 1);
         SlideShowLoad();
-        GameManager.gainOnClick = 100000000;
+       
         
 
 
@@ -160,11 +163,11 @@ public void SlideShowLoad()
         {
             case 0:
                 suffix = string.Empty;
-                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick) + suffix;
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick).ToString() + suffix;
                 break;
             case 1:
                 suffix = "K";
-                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick) + suffix;
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.gainOnClick).ToString("N1") + suffix;
                 break;
             case 2:
                 suffix = "M";
@@ -178,10 +181,41 @@ public void SlideShowLoad()
             
         }
 }
+    void ShowPassive(string text)
+{
+    
+    if (floatingText && GameManager.passiveGain > 0 && Street.activeSelf == true && Bums.activeSelf == false && UpgradeShop.activeSelf == false && Room.activeSelf == false && Home.activeSelf == false && FurnitureShop.activeSelf == false && BumsBuying.activeSelf == false && Settings.activeSelf == false && Bonus.activeSelf == false)
+        {
+            
+            Vector3 textPos = center; //+ new Vector3 (UnityEngine.Random.Range(-size.x/2, +size.x/2), UnityEngine.Random.Range(-size.y/2, +size.y/2), -3);
+            GameObject prefab = Instantiate (floatingText, textPos, Quaternion.identity);
+            switch (toGetSuffix(GameManager.passiveGain))
+        {
+            case 0:
+                suffix = string.Empty;
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.passiveGain).ToString() + suffix;
+                break;
+            case 1:
+                suffix = "K";
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.passiveGain).ToString("N1") + suffix;
+                break;
+            case 2:
+                suffix = "M";
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.passiveGain).ToString("N1") + suffix;
+                break;
+            case 3:
+                suffix = "B";
+                prefab.GetComponentInChildren<TextMesh>().text = "" + toShortNumber(GameManager.passiveGain).ToString("N1") + suffix;
+                break;
+        } 
+            
+        }
+}
     IEnumerator ScorePerSec()
     {
         yield return new WaitForSeconds(1f);
         score += GameManager.passiveGain;
+        ShowPassive(passiveScoreValue.text);
         SavePlayer();
         StartCoroutine(ScorePerSec());
 
@@ -729,10 +763,10 @@ public void SlideShowLoad()
         {
             case 0:
                 suffix = string.Empty;
-                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]).ToString() + suffix);                break;
             case 1:
                 suffix = string.Empty;
-                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+                changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]).ToString() + suffix);                break;
             case 2:
                 suffix = "M";
                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesBums[bum]))) + suffix);                break;
@@ -762,10 +796,10 @@ public void SlideShowLoad()
         {
             case 0:
                 suffix = string.Empty;
-                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]).ToString() + suffix);                break;
             case 1:
                 suffix = string.Empty;
-                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]) + suffix);                break;
+                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesBums[bum]).ToString() + suffix);                break;
             case 2:
                 suffix = "M";
                 changeBumItem[bum].transform.Find("Text (1)").GetComponent<Text>().text = ("" +Math.Round (toShortNumber(Convert.ToInt32 (pricesBums[bum]))) + suffix);                break;
@@ -1026,10 +1060,10 @@ public void SlideShowLoad()
         {
             case 0:
                 suffix = string.Empty;
-                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]).ToString() + suffix);                break;
             case 1:
                 suffix = string.Empty;
-                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]).ToString() + suffix);                break;
             case 2:
                 suffix = "M";
                 changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesUpgrades[upg]))) + suffix);                break;
@@ -1060,10 +1094,10 @@ public void SlideShowLoad()
         {
             case 0:
                 suffix = string.Empty;
-                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]).ToString() + suffix);                break;
             case 1:
-                suffix = "string.Empty";
-                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
+                suffix = string.Empty;
+                changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]).ToString() + suffix);                break;
             case 2:
                 suffix = "M";
                 changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (toShortNumber(Convert.ToInt32 (pricesUpgrades[upg]))) + suffix);                break;
@@ -1241,8 +1275,37 @@ public void SlideShowLoad()
     public void ChangeSprite (Sprite to, GameObject gm)
     {
         gm.transform.Find("Image").GetComponent<Image>().sprite = to; 
-    }
-   
+    } 
+  public IEnumerator TextUpdate()
+    {
+        writeTextValue = GameManager.gainOnClick * 100;
+        switch (toGetSuffix(writeTextValue))
+        {
+            
+case 0:
+                suffix = string.Empty;
+                
+                bonusText.text = "+" + (writeTextValue).ToString() + suffix; 
+                break;
+            case 1:
+                suffix = "K";
+                bonusText.text = "+" + (writeTextValue).ToString("N1") + suffix; 
+
+                         break;
+            case 2:
+                suffix = "M";
+                bonusText.text = "+" + (writeTextValue).ToString("N1")+ suffix; 
+
+                         break;
+            case 3:
+                suffix = "B";
+                bonusText.text = "+" + (writeTextValue).ToString("N1")+ suffix; 
+
+                         break;
+        }
+                yield return new WaitForSeconds(60f);
+        StartCoroutine(TextUpdate());
+    } 
     
 }
 
