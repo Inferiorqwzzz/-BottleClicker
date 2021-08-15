@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class MainScript : MonoBehaviour
 {
     #region Variables declaration 
+
+    public double score;
     public Text activeScoreValue, passiveScoreValue, idleInfo;
     public GameObject Street, Room, Home, FurnitureShop, Bums, UpgradeShop, BumsBuying, Settings, Bonus, Idle;
     public Sprite[] roomFurniture, homeFurniture, FurShopSprites, BumShopSprites, UpgShopSprites;
@@ -37,12 +39,16 @@ public class MainScript : MonoBehaviour
 
     private int soundActive, musicActive;
 
+    public Sprite soundOff, soundOn, musicOff, musicOn;
 
+    public GameObject gmMusic, gmSound; 
+
+    
     string suffix;
     #endregion
     void Awake()
     {
-      if (slideShowState == 1 && GameManager.score == 0 && bumsLevels[0] == 0 && upgLevels [0] == 0 && GameManager.curFurnitureItem == 0)
+      if (slideShowState == 1 && score == 0 && bumsLevels[0] == 0 && upgLevels [0] == 0 && GameManager.curFurnitureItem == 0)
        SceneManager.LoadScene ("SampleScene");  
     }
     void Start()
@@ -67,23 +73,23 @@ public class MainScript : MonoBehaviour
         Debug.Log("Slideshow " + slideShowState + " StartPan " + startPanState);
 
         passiveScoreValue.text = "В секунду:" + GameManager.passiveGain;
-        switch (toGetSuffix(GameManager.score))
+        switch (toGetSuffix(score))
         {
             case 0:
                 suffix = string.Empty;
-                activeScoreValue.text = "" + toShortNumber(GameManager.score) + suffix;
+                activeScoreValue.text = "" + toShortNumber(score) + suffix;
                 break;
             case 1:
                 suffix = string.Empty;
-                activeScoreValue.text = "" + toShortNumber(GameManager.score) + suffix;
+                activeScoreValue.text = "" + toShortNumber(score) + suffix;
                 break;
             case 2:
                 suffix = "M";
-                activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
+                activeScoreValue.text = "" + toShortNumber(score).ToString("N1") + suffix;
                 break;
             case 3:
                 suffix = "B";
-                activeScoreValue.text = "" + toShortNumber(GameManager.score).ToString("N1") + suffix;
+                activeScoreValue.text = "" + toShortNumber(score).ToString("N1") + suffix;
                 break;
         }
        
@@ -97,13 +103,13 @@ public class MainScript : MonoBehaviour
         FurShopLoad();
         UpgShopLoad();
         
-        GameManager.score = PlayerPrefs.GetInt("score", 0);
+        
         GameManager.gainOnClick = PlayerPrefs.GetInt("gainOnClick", 1);
         GameManager.passiveGain = PlayerPrefs.GetInt("passiveGain", 0);
         startPanState = PlayerPrefs.GetInt("startPanState", 1);
         slideShowState = PlayerPrefs.GetInt("slideShowState", 1);
         SlideShowLoad();
-        GameManager.gainOnClick = 10000;
+        GameManager.gainOnClick = 100000000;
         
 
 
@@ -123,7 +129,7 @@ public class MainScript : MonoBehaviour
 }
 public void SlideShowLoad()
 {
-    if (slideShowState == 1 && GameManager.score == 0 && bumsLevels[0] == 0 && upgLevels [0] == 0 && GameManager.curFurnitureItem == 0)
+    if (slideShowState == 1 && score == 0 && bumsLevels[0] == 0 && upgLevels [0] == 0 && GameManager.curFurnitureItem == 0)
     {
     startPan.SetActive(true);
     slideShow.SetActive(true);
@@ -137,8 +143,8 @@ public void SlideShowLoad()
     public void Incriment()
     {
         
-        GameManager.score += GameManager.gainOnClick;
-        PlayerPrefs.SetInt("score", GameManager.score);
+        score += GameManager.gainOnClick;
+        SavePlayer();
         ShowClick("" + GameManager.gainOnClick);
         bottleCLickAudio.GetComponent<AudioSource>().Play();
     }
@@ -175,13 +181,13 @@ public void SlideShowLoad()
     IEnumerator ScorePerSec()
     {
         yield return new WaitForSeconds(1f);
-        GameManager.score += GameManager.passiveGain;
-        PlayerPrefs.SetInt("score", GameManager.score);
+        score += GameManager.passiveGain;
+        SavePlayer();
         StartCoroutine(ScorePerSec());
 
     }
     #region SuffixGetting Methods   
-    public double toShortNumber(int number)
+    public double toShortNumber(double number)
     {
         int mag = (int)(Math.Floor(Math.Log10(number)) / 3); // Truncates (усекать,округлять) to 6, divides to 2
         double divisor = Math.Pow(10, mag * 3);
@@ -190,7 +196,7 @@ public void SlideShowLoad()
 
         return shortNumber;
     }
-    public int toGetSuffix(int number)
+    public int toGetSuffix(double number)
     {
         int mag = (int)(Math.Floor(Math.Log10(number)) / 3); // Truncates (усекать,округлять) to 6, divides to 2
         double divisor = Math.Pow(10, mag * 3);
@@ -422,12 +428,12 @@ public void SlideShowLoad()
 
     public void BuyFurniture(int home1room2)
     {
-        if ((GameManager.score >= pricesFurniture[GameManager.curFurnitureItem]))
+        if ((score >= pricesFurniture[GameManager.curFurnitureItem]))
         {
         
             buyAudio.GetComponent<AudioSource>().Play();
-            GameManager.score = GameManager.score - pricesFurniture[GameManager.curFurnitureItem];
-            PlayerPrefs.SetInt("score", GameManager.score);
+            score = score - pricesFurniture[GameManager.curFurnitureItem];
+            SavePlayer();
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Text").GetComponent<Text>().text = FurItemName[GameManager.curFurnitureItem];
             changeFurnitureItem [GameManager.curFurnitureItem].transform.Find("Image").GetComponent<Image>().sprite = FurShopSprites[GameManager.curFurnitureItem];
             changeFurnitureItem[GameManager.curFurnitureItem].transform.Find("Button").gameObject.SetActive(false);
@@ -498,12 +504,12 @@ public void SlideShowLoad()
         switch (bum)
         {
             case 0:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -514,12 +520,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 1:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -531,12 +537,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 2:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -547,12 +553,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 3:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -563,12 +569,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 4:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -579,12 +585,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 5:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -595,12 +601,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 6:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -611,12 +617,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 7:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -627,12 +633,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 8:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -643,12 +649,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 9:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -659,12 +665,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 10:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -675,12 +681,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 11:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -691,12 +697,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 12:
-                if (bumsLevels[bum] == 0 && pricesBums[bum] <= GameManager.score)
+                if (bumsLevels[bum] == 0 && pricesBums[bum] <= score)
                 {
                     BumManipulator1(bum);
                     break;
                 }
-                else if (pricesBums[bum] <= GameManager.score)
+                else if (pricesBums[bum] <= score)
                 {
                     BumManipulator2(bum);
                     break;
@@ -713,8 +719,8 @@ public void SlideShowLoad()
     public void BumManipulator1(int bum)
     {
         buyAudio.GetComponent<AudioSource>().Play();
-        GameManager.score = GameManager.score - Convert.ToInt32 (pricesBums[bum]);
-        PlayerPrefs.SetInt("score", GameManager.score);
+        score = score - Convert.ToInt32 (pricesBums[bum]);
+        SavePlayer();
         GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
@@ -745,8 +751,8 @@ public void SlideShowLoad()
     public void BumManipulator2(int bum)
     {
         buyAudio.GetComponent<AudioSource>().Play();
-        GameManager.score = GameManager.score - Convert.ToInt32 (pricesBums[bum]);
-        PlayerPrefs.SetInt("score", GameManager.score);
+        score = score - Convert.ToInt32 (pricesBums[bum]);
+        SavePlayer();
         GameManager.passiveGain = GameManager.passiveGain + bumsGains[bum];
         PlayerPrefs.SetInt("passiveGain", GameManager.passiveGain);
         bumsLevels[bum]++;
@@ -796,13 +802,13 @@ public void SlideShowLoad()
         switch (upg)
         {
             case 0:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
 
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -813,12 +819,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 1:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -829,12 +835,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 2:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -845,12 +851,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 3:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -861,12 +867,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 4:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -877,12 +883,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 5:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -893,12 +899,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 6:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -909,12 +915,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 7:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -925,12 +931,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 8:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -941,12 +947,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 9:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -957,12 +963,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 10:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -973,12 +979,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 11:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -989,12 +995,12 @@ public void SlideShowLoad()
                     break;
                 }
             case 12:
-                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= GameManager.score)
+                if (upgLevels[upg] == 0 && pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator1(upg);
                     break;
                 }
-                else if (pricesUpgrades[upg] <= GameManager.score)
+                else if (pricesUpgrades[upg] <= score)
                 {
                     BuyManipulator2(upg);
                     break;
@@ -1010,8 +1016,8 @@ public void SlideShowLoad()
     public void BuyManipulator1(int upg)
     {
         buyAudio.GetComponent<AudioSource>().Play();
-        GameManager.score = GameManager.score - Convert.ToInt32(pricesUpgrades[upg]);
-        PlayerPrefs.SetInt("score", GameManager.score);
+        score = score - Convert.ToInt32(pricesUpgrades[upg]);
+        SavePlayer();
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
         PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
         pricesUpgrades[upg] = pricesUpgrades[upg] * 1.3;
@@ -1044,8 +1050,8 @@ public void SlideShowLoad()
     public void BuyManipulator2(int upg)
     {
         buyAudio.GetComponent<AudioSource>().Play();
-        GameManager.score = GameManager.score - Convert.ToInt32(pricesUpgrades[upg]);
-        PlayerPrefs.SetInt("score", GameManager.score);
+        score = score - Convert.ToInt32(pricesUpgrades[upg]);
+        SavePlayer();
         GameManager.gainOnClick = GameManager.gainOnClick + upgClickGains[upg];
         PlayerPrefs.SetInt("gainOnClick", GameManager.gainOnClick);
         pricesUpgrades[upg] = pricesUpgrades[upg] * 1.3;
@@ -1056,7 +1062,7 @@ public void SlideShowLoad()
                 suffix = string.Empty;
                 changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
             case 1:
-                suffix = string.Empty;
+                suffix = "string.Empty";
                 changeUpgradeItem[upg].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round (pricesUpgrades[upg]) + suffix);                break;
             case 2:
                 suffix = "M";
@@ -1120,7 +1126,7 @@ public void SlideShowLoad()
         {
             pricesUpgrades[i] = data.pricesOfUpgrades[i];
         }
-        
+        score = data.score;
     }
     public void DeletePlayer()
     {
@@ -1144,6 +1150,7 @@ public void SlideShowLoad()
         {
             pricesUpgrades[i] = startingPricesOfUpgrades[i];
         }
+        score = 0; 
 
         SavePlayer();
     }
@@ -1151,22 +1158,24 @@ public void SlideShowLoad()
 
     #endregion
 
-    public void offMusic()
+    public void offMusic(GameObject gm)
     {
         if (gameObject.GetComponent<AudioSource>().mute == false)
         {
         gameObject.GetComponent<AudioSource>().mute = true; 
         musicActive = 1;
         PlayerPrefs.SetInt("musicActive", musicActive);
+        ChangeSprite(musicOff, gm);
         }
         else 
         {
             gameObject.GetComponent<AudioSource>().mute = false; 
             musicActive = 0;
             PlayerPrefs.SetInt("musicActive", musicActive);
+            ChangeSprite(musicOn, gm);
         }
     }
-    public void OffSounds()
+    public void OffSounds(GameObject gm)
     {
       if (buyAudio.GetComponent<AudioSource>().mute == false)
         {
@@ -1177,6 +1186,7 @@ public void SlideShowLoad()
         bottleCLickAudio.GetComponent<AudioSource>().mute = true; 
         soundActive = 1;
         PlayerPrefs.SetInt("soundActive", soundActive);
+        ChangeSprite(soundOff, gm);
         }
         else 
         {
@@ -1187,6 +1197,7 @@ public void SlideShowLoad()
         bottleCLickAudio.GetComponent<AudioSource>().mute = false; 
         soundActive = 0;
         PlayerPrefs.SetInt("soundActive", soundActive);
+        ChangeSprite(soundOn, gm);
         }  
     }
     public void PlayNoBuyAudio()
@@ -1200,10 +1211,12 @@ public void SlideShowLoad()
          if (musicActive == 1)
         {
         gameObject.GetComponent<AudioSource>().mute = true; 
+        ChangeSprite(musicOff, gmMusic);
         }
         else 
         {
             gameObject.GetComponent<AudioSource>().mute = false; 
+            ChangeSprite(musicOn, gmMusic);
         }
 
         if (soundActive == 1)
@@ -1213,6 +1226,7 @@ public void SlideShowLoad()
         noMoneyAudio.GetComponent<AudioSource>().mute = true; 
         openHomeAudio.GetComponent<AudioSource>().mute = true; 
         bottleCLickAudio.GetComponent<AudioSource>().mute = true; 
+         ChangeSprite(soundOff, gmSound);
         }
         else 
         {
@@ -1221,8 +1235,14 @@ public void SlideShowLoad()
         noMoneyAudio.GetComponent<AudioSource>().mute = false; 
         openHomeAudio.GetComponent<AudioSource>().mute = false; 
         bottleCLickAudio.GetComponent<AudioSource>().mute = false; 
+         ChangeSprite(soundOn, gmSound);
         }  
     }
+    public void ChangeSprite (Sprite to, GameObject gm)
+    {
+        gm.transform.Find("Image").GetComponent<Image>().sprite = to; 
+    }
+   
     
 }
 

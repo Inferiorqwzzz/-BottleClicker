@@ -8,6 +8,10 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public static int bonusNum; 
 
     public GameManager gm;
+
+    public GameObject doubleClick, doublePassive, plusScore; 
+
+    
     void Start()
     {
         gm = GetComponent<GameManager>();
@@ -21,6 +25,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         bonusNum = num;
         if (Advertisement.IsReady("Rewarded_Android"))
         {
+            
             Advertisement.Show("Rewarded_Android");
         }
         else
@@ -47,6 +52,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         Debug.Log("Video is finished");
+        DisableAllButtons(); 
         switch (bonusNum)
         {
             case 0:
@@ -54,13 +60,17 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                 {
                     Debug.Log("DOUBLEFROMADD");
                     gm.DoubleFromAdd();
+                    
                 }
                 break;
             case 1:
                 if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
                 {
                     Debug.Log("DOUBLECOLLECT");
+                    
                     gm.DoubleCollect();
+                        
+                    
                 }
                 break;
 
@@ -69,6 +79,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                     if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
                     {
                         Debug.Log("DOUBLECLICK");
+                       
                         gm.DoubleClick();
                     }
                     break;
@@ -78,12 +89,29 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                     if (placementId == "Rewarded_Android" && showResult == ShowResult.Finished)
                     {
                         Debug.Log("PLUSFROMADD");
+                        
                         gm.PlusFromAdd();
                     }
                     break;
                 }
         }
 
+    }
+    public IEnumerator GameObjectDisable (float seconds, GameObject [] goArr)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+        goArr[i].SetActive(false);
+        }
+        yield return new WaitForSeconds(seconds);
+        for (int i = 0; i < 3; i++)
+        {
+        goArr[i].SetActive (true);
+        }
+    }
+    public void DisableAllButtons()
+    {
+           StartCoroutine(GameObjectDisable(15, new GameObject [] {plusScore, doubleClick, doublePassive}));
     }
 
 }

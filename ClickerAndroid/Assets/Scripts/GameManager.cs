@@ -6,7 +6,7 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    public static int score;
+    
     public static int gainOnClick;
     public static int passiveGain;
     public static int curRoomFurniture;
@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
         if (toAddFromTime < 0)
         toAddFromTime = 2000000000;
         StartCoroutine(toWriteTime());
+        
         
     }
      public void Update()
@@ -88,50 +89,54 @@ public class GameManager : MonoBehaviour
     }
     public void DoubleFromAdd ()
     {
+         MainScript mainScript = GetComponent<MainScript>();
         PlayerPrefs.GetInt("toAddFromTime", toAddFromTime);
 
-        score = PlayerPrefs.GetInt("score", 0);
-        score += toAddFromTime;
-        score += toAddFromTime;
+        mainScript.score = PlayerPrefs.GetInt("mainScript.score", 0);
+        mainScript.score += toAddFromTime;
+        mainScript.score += toAddFromTime;
 
-        PlayerPrefs.SetInt("score", score);
+        mainScript.SavePlayer();
         
     }
     public void PlusFromAdd()
     {
-        score = PlayerPrefs.GetInt("score", 0);
-        score += 50000;
-        PlayerPrefs.SetInt("score", score);
+         MainScript mainScript = GetComponent<MainScript>();
+        mainScript.score = PlayerPrefs.GetInt("mainScript.score", 0);
+        mainScript.score += 50000;
+        mainScript.SavePlayer();
     }
 
     public void toAddFromTimeMethod ()
     {
-        score = PlayerPrefs.GetInt("score", 0);
-        score += toAddFromTime;
-        PlayerPrefs.SetInt("score", score);
+         MainScript mainScript = GetComponent<MainScript>();
+        mainScript.score = PlayerPrefs.GetInt("mainScript.score", 0);
+        mainScript.score += toAddFromTime;
+        mainScript.SavePlayer();
     }
 
     public void DoubleClick()
     {
             
             gainOnClick = gainOnClick * 2;
-            StartCoroutine(WaitForSec(60f, 1));
+            StartCoroutine(WaitForSec(15f, 1));
              
     }
 
     public void DoubleCollect()
     {
         passiveGain *= 2; 
-        StartCoroutine(WaitForSec(60f, 0));
+        StartCoroutine(WaitForSec(15f, 0));
 
     }
     
     public IEnumerator WaitForSec(float seconds, int whatToDo)
     {
+       
         Debug.Log("waiting");
         yield return new WaitForSeconds(seconds);
         Debug.Log("Waited");
-
+        
         if (whatToDo == 0)
         {
             passiveGain /=2; 
@@ -140,5 +145,6 @@ public class GameManager : MonoBehaviour
         {
             gainOnClick /=2;
         }
+
     }
 }

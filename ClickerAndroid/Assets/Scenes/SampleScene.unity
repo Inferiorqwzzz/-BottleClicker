@@ -1486,7 +1486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &72310950
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10879,6 +10879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4bfabf63e5fff4f97b85801ee404f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
   activeScoreValue: {fileID: 707346157}
   passiveScoreValue: {fileID: 752956109}
   idleInfo: {fileID: 1844913373}
@@ -11117,6 +11118,12 @@ MonoBehaviour:
     type: 3}
   center: {x: 0.11, y: 2, z: -3}
   size: {x: 5, y: 3, z: -3}
+  soundOff: {fileID: 21300000, guid: 13369cc26b273b44286873aa5cb5d8ce, type: 3}
+  soundOn: {fileID: 21300000, guid: 0d8764f3a8d53bd4a8d51fdda34ea455, type: 3}
+  musicOff: {fileID: 21300000, guid: 5527a8116ce34a14a946b84ed4e81ef7, type: 3}
+  musicOn: {fileID: 21300000, guid: 60cf5d2e00cf8824f8e2553bdb6deda0, type: 3}
+  gmMusic: {fileID: 1961395223}
+  gmSound: {fileID: 1152340976}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -11199,6 +11206,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 0}
+  doubleClick: {fileID: 988492381}
+  doublePassive: {fileID: 1830609212}
+  plusScore: {fileID: 1141190976}
 --- !u!82 &519420035
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12105,7 +12115,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041A\u043B\u0438\u043A\u0438 x2 \u043D\u0430 60 \u0441\u0435\u043A"
+  m_Text: "\u041A\u043B\u0438\u043A\u0438 x2 \u043D\u0430 15 \u0441\u0435\u043A"
 --- !u!222 &542897341
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20905,7 +20915,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &992711020
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24460,10 +24470,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 519420030}
         m_MethodName: OffSounds
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1152340976}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -37985,7 +37995,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0421\u0431\u043E\u0440 x2 \u043D\u0430 60 \u0441\u0435\u043A"
+  m_Text: "\u0421\u0431\u043E\u0440 x2 \u043D\u0430 15 \u0441\u0435\u043A"
 --- !u!222 &1836478633
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -40017,10 +40027,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 519420030}
         m_MethodName: offMusic
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1961395223}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -44427,12 +44437,12 @@ PrefabInstance:
     - target: {fileID: 7467465941384045035, guid: a2f6b7b9b249c6d44bfe7b8451336d55,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -346.42
+      value: -372.35
       objectReference: {fileID: 0}
     - target: {fileID: 7467465941384045035, guid: a2f6b7b9b249c6d44bfe7b8451336d55,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -438.68
+      value: -712
       objectReference: {fileID: 0}
     - target: {fileID: 7467465941384045035, guid: a2f6b7b9b249c6d44bfe7b8451336d55,
         type: 3}
