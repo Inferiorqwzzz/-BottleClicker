@@ -17,7 +17,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 
         
 
-    double writeTextValue = GameManager.gainOnClick * 100; 
+    double writeTextValue;
     void Start()
     {
         ;

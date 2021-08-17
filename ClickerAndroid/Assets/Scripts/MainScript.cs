@@ -84,7 +84,7 @@ public class MainScript : MonoBehaviour
                 break;
             case 1:
                 suffix = string.Empty;
-                activeScoreValue.text = "" + toShortNumber(score).ToString() + suffix;
+                activeScoreValue.text = "" + score.ToString("G") + suffix;
                 break;
             case 2:
                 suffix = "M";
@@ -820,7 +820,7 @@ public void SlideShowLoad()
             for (int i = 0; i < GameManager.curBumItem; i++)
             {
                 changeBumItem[i].transform.Find("Text").GetComponent<Text>().text = BumItemName[i];
-                changeBumItem[i].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesBums[i]}");
+                changeBumItem[i].transform.Find("Text (1)").GetComponent<Text>().text = ("" + Math.Round(pricesBums[i]));
                 changeBumItem[i].transform.Find("Texx").GetComponent<Text>().text = ("Ур: " + bumsLevels[i]);
                 changeBumItem[i].transform.Find("Image").GetComponent<Image>().sprite = BumShopSprites[i];
                 changeBumItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
@@ -1123,7 +1123,7 @@ public void SlideShowLoad()
             {
                 changeUpgradeItem[i].transform.Find("Text").GetComponent<Text>().text = UpgItemName[i];
                 changeUpgradeItem[i].transform.Find("Text (2)").GetComponent<Text>().text = ("Ур: " + upgLevels[i]);
-                changeUpgradeItem[i].transform.Find("Text (1)").GetComponent<Text>().text = ($"{pricesUpgrades[i]}");
+                changeUpgradeItem[i].transform.Find("Text (1)").GetComponent<Text>().text =("" + Math.Round(pricesUpgrades[i]));
                 changeUpgradeItem[i].transform.Find("Image").GetComponent<Image>().sprite = UpgShopSprites[i];
                 changeUpgradeItem[i + 1].transform.Find("Button").gameObject.SetActive(true);
             }
@@ -1285,25 +1285,25 @@ public void SlideShowLoad()
 case 0:
                 suffix = string.Empty;
                 
-                bonusText.text = "+" + (writeTextValue).ToString() + suffix; 
+                bonusText.text = "+" + Convert.ToInt32 (writeTextValue) + suffix; 
                 break;
             case 1:
                 suffix = "K";
-                bonusText.text = "+" + (writeTextValue).ToString("N1") + suffix; 
+                bonusText.text = "+" + toShortNumber(writeTextValue).ToString("N1") + suffix; 
 
                          break;
             case 2:
                 suffix = "M";
-                bonusText.text = "+" + (writeTextValue).ToString("N1")+ suffix; 
+                bonusText.text = "+" + toShortNumber(writeTextValue).ToString("N1")+ suffix; 
 
                          break;
             case 3:
                 suffix = "B";
-                bonusText.text = "+" + (writeTextValue).ToString("N1")+ suffix; 
+                bonusText.text = "+" + toShortNumber(writeTextValue).ToString("N1")+ suffix; 
 
                          break;
         }
-                yield return new WaitForSeconds(60f);
+                yield return new WaitForSeconds(1f);
         StartCoroutine(TextUpdate());
     } 
     
