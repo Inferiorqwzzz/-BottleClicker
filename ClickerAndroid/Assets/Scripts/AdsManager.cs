@@ -121,7 +121,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     }
     public void DisableAllButtons()
     {
-           StartCoroutine(GameObjectDisable(15, new GameObject [] {plusScore, doubleClick, doublePassive}));
+           StartCoroutine(GameObjectDisable(0, new GameObject [] {plusScore, doubleClick, doublePassive}));
     }
     
 
